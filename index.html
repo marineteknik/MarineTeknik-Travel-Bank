@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Followup Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-light: #3b82f6;
+            --warning: #ea580c;
+            --success: #059669;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #f0f9ff 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 32px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-value.warning {
+            color: var(--warning);
+        }
+
+        .controls {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease-out 0.1s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="file"],
+        select,
+        input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input[type="file"]:hover,
+        select:hover {
+            border-color: var(--accent);
+            background: var(--gray-50);
+        }
+
+        select:focus,
+        input[type="file"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            grid-column: 1 / -1;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+            transform: translateY(-1px);
+        }
+
+        .btn-small {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .message.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .message.info {
+            background: #dbeafe;
+            color: #0c4a6e;
+            border: 1px solid #bfdbfe;
+        }
+
+        .table-wrapper {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease-out 0.2s both;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--gray-50);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .cardholder-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cardholder-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .emp-id {
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-family: 'Monaco', monospace;
+        }
+
+        .amount-highlight {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-submitted {
+            background: #fed7aa;
+            color: #92400e;
+        }
+
+        .badge-unassigned {
+            background: #fecaca;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+
+        .email-templates-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .email-templates-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .email-templates-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .email-templates-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .templates-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--gray-50);
+        }
+
+        .template-tab {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .template-tab:hover {
+            color: var(--text-primary);
+            background: white;
+        }
+
+        .template-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: white;
+        }
+
+        .close-template-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .close-template-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .email-template-textarea {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            font-family: 'Aptos', 'Calibri', Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.6;
+            resize: none;
+            color: var(--text-primary);
+        }
+
+        .email-template-textarea:focus {
+            outline: none;
+            box-shadow: inset 0 0 0 2px var(--accent);
+        }
+
+        .email-template-actions {
+            display: flex;
+            gap: 8px;
+            padding: 16px;
+            border-top: 1px solid var(--border);
+            background: var(--gray-50);
+        }
+
+        .email-template-actions button {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                grid-column: auto;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20% auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📧 Expense Followup Assistant</h1>
+            <p class="subtitle">Import expense data, filter unassigned transactions, and send email followups</p>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Transactions</div>
+                    <div class="stat-value" id="totalTransactions">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Unassigned</div>
+                    <div class="stat-value warning" id="unassignedTransactions">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Unique Employees</div>
+                    <div class="stat-value" id="uniqueEmployees">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Unassigned Amount</div>
+                    <div class="stat-value amount-highlight" id="unassignedAmount">$0</div>
+                </div>
+            </div>
+        </header>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <div id="message"></div>
+
+        <div class="controls">
+            <div class="controls-grid">
+                <div class="control-group">
+                    <label>Import CSV File</label>
+                    <input type="file" id="csvFile" accept=".csv" />
+                </div>
+
+                <div class="control-group">
+                    <label>Filter by Report Status</label>
+                    <select id="statusFilter" onchange="filterTable()">
+                        <option value="unassigned" selected>Unassigned</option>
+                        <option value="">All Statuses</option>
+                        <option value="paid">Paid</option>
+                        <option value="submitted">Submitted</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Filter by Employee</label>
+                    <select id="employeeFilter" onchange="filterTable()">
+                        <option value="">All Employees</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label>Search</label>
+                    <input type="text" id="searchInput" placeholder="Name, ID, Project..." onkeyup="filterTable()">
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-primary" onclick="importCSV()">📥 Load Data</button>
+                    <button class="btn-secondary" onclick="exportTableAsImage()">📋 Copy Table</button>
+                    <button class="btn-secondary" onclick="toggleEmailTemplates()">✉️ Email Templates</button>
+                    <button class="btn-secondary" onclick="exportPDF()">📄 Export as PDF</button>
+                    <button class="btn-secondary" onclick="clearData()">🗑️ Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Templates Section -->
+        <div id="emailTemplatesSection" class="email-templates-section" style="display: none;">
+            <div class="email-templates-container">
+                <div class="email-templates-header">
+                    <h2>Email Templates</h2>
+                    <button class="close-template-btn" onclick="toggleEmailTemplates()">✕</button>
+                </div>
+                
+                <div class="templates-tabs">
+                    <button class="template-tab active" onclick="switchTemplate('template1')">Template 1 (Default)</button>
+                    <button class="template-tab" onclick="switchTemplate('template2')">Template 2 (Spare)</button>
+                </div>
+
+                <textarea id="emailTemplate1Text" class="email-template-textarea" placeholder="Edit your email template here..."></textarea>
+                <textarea id="emailTemplate2Text" class="email-template-textarea" placeholder="Edit your spare email template here..." style="display: none;"></textarea>
+                
+                <div class="email-template-actions">
+                    <button class="btn-primary" onclick="copyCurrentTemplate()">📋 Copy Template</button>
+                    <button class="btn-secondary" onclick="resetCurrentTemplate()">↺ Reset to Default</button>
+                    <button class="btn-secondary" onclick="toggleEmailTemplates()">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Report Status</th>
+                        <th>Posted Date</th>
+                        <th>Cardholder</th>
+                        <th>Project Code</th>
+                        <th>Amount (USD)</th>
+                        <th>Split Amount (USD)</th>
+                        <th>Merchant</th>
+                        <th>Approved by Finance</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr class="empty-state">
+                        <td colspan="8">
+                            <div class="empty-state-icon">📋</div>
+                            <h3>No data yet</h3>
+                            <p>Upload a CSV file to view transactions</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <script>
+        let allTransactions = [];
+        let employees = new Set();
+        let currentTemplate = 'template1';
+
+        const DEFAULT_EMAIL_TEMPLATE_1 = `REMINDER: Submit Credit Card Transactions on Travel Bank
+
+Good day,
+
+Just a quick reminder to please ensure that you log into Travel Bank and SUBMIT your credit card transactions as soon as they clear. I've attached an image showing the transactions that are still outstanding.
+
+Let me know if you need any help with this or run into any issues.`;
+
+        const DEFAULT_EMAIL_TEMPLATE_2 = ``;
+
+        function initEmailTemplates() {
+            const saved1 = localStorage.getItem('emailTemplate1');
+            const saved2 = localStorage.getItem('emailTemplate2');
+            document.getElementById('emailTemplate1Text').value = saved1 || DEFAULT_EMAIL_TEMPLATE_1;
+            document.getElementById('emailTemplate2Text').value = saved2 || DEFAULT_EMAIL_TEMPLATE_2;
+        }
+
+        function toggleEmailTemplates() {
+            const section = document.getElementById('emailTemplatesSection');
+            if (section.style.display === 'none') {
+                section.style.display = 'flex';
+                initEmailTemplates();
+                switchTemplate('template1');
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        function switchTemplate(template) {
+            currentTemplate = template;
+            const tabs = document.querySelectorAll('.template-tab');
+            const textarea1 = document.getElementById('emailTemplate1Text');
+            const textarea2 = document.getElementById('emailTemplate2Text');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            if (template === 'template1') {
+                tabs[0].classList.add('active');
+                textarea1.style.display = 'block';
+                textarea2.style.display = 'none';
+            } else {
+                tabs[1].classList.add('active');
+                textarea1.style.display = 'none';
+                textarea2.style.display = 'block';
+            }
+        }
+
+        function getCurrentTemplate() {
+            if (currentTemplate === 'template1') {
+                return document.getElementById('emailTemplate1Text').value;
+            } else {
+                return document.getElementById('emailTemplate2Text').value;
+            }
+        }
+
+        function copyCurrentTemplate() {
+            const text = getCurrentTemplate();
+
+            navigator.clipboard.writeText(text).then(() => {
+                showMessage('✓ Template copied to clipboard', 'success');
+                // Save both templates
+                localStorage.setItem('emailTemplate1', document.getElementById('emailTemplate1Text').value);
+                localStorage.setItem('emailTemplate2', document.getElementById('emailTemplate2Text').value);
+                setTimeout(() => {
+                    toggleEmailTemplates();
+                }, 500);
+            }).catch(() => {
+                showMessage('Failed to copy to clipboard', 'error');
+            });
+        }
+
+        function resetCurrentTemplate() {
+            if (currentTemplate === 'template1') {
+                if (confirm('Reset Template 1 to default?')) {
+                    document.getElementById('emailTemplate1Text').value = DEFAULT_EMAIL_TEMPLATE_1;
+                    localStorage.setItem('emailTemplate1', DEFAULT_EMAIL_TEMPLATE_1);
+                    showMessage('✓ Template 1 reset to default', 'success');
+                }
+            } else {
+                if (confirm('Reset Template 2?')) {
+                    document.getElementById('emailTemplate2Text').value = DEFAULT_EMAIL_TEMPLATE_2;
+                    localStorage.setItem('emailTemplate2', DEFAULT_EMAIL_TEMPLATE_2);
+                    showMessage('✓ Template 2 reset', 'success');
+                }
+            }
+        }
+
+        function exportTableAsImage() {
+            const filtered = getFilteredTransactions();
+            
+            if (filtered.length === 0) {
+                showMessage('No transactions to export', 'error');
+                return;
+            }
+
+            const tableElement = document.querySelector('table');
+            
+            // Create a clone of the table for cleaner export
+            const cloneTable = tableElement.cloneNode(true);
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.backgroundColor = 'white';
+            tempContainer.style.padding = '20px';
+            tempContainer.appendChild(cloneTable);
+            document.body.appendChild(tempContainer);
+
+            // Convert table to canvas/image
+            html2canvas(tempContainer, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                logging: false
+            }).then(canvas => {
+                // Copy image to clipboard
+                canvas.toBlob(blob => {
+                    const item = new ClipboardItem({ 'image/png': blob });
+                    navigator.clipboard.write([item]).then(() => {
+                        showMessage('✓ Table copied to clipboard as image', 'success');
+                        document.body.removeChild(tempContainer);
+                    }).catch(() => {
+                        showMessage('Failed to copy to clipboard', 'error');
+                        document.body.removeChild(tempContainer);
+                    });
+                });
+            }).catch(error => {
+                showMessage('Error capturing table', 'error');
+                document.body.removeChild(tempContainer);
+            });
+        }
+
+        function showMessage(msg, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.innerHTML = `<div class="message ${type}">${msg}</div>`;
+            setTimeout(() => { messageEl.innerHTML = ''; }, 4000);
+        }
+
+        function importCSV() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                showMessage('Please select a file', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const csv = e.target.result;
+                    const lines = csv.split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+
+                    allTransactions = [];
+                    employees.clear();
+
+                    for (let i = 1; i < lines.length; i++) {
+                        if (!lines[i].trim()) continue;
+
+                        const values = parseCSVLine(lines[i]);
+                        const transaction = {};
+                        headers.forEach((header, index) => {
+                            transaction[header] = (values[index] || '').trim().replace(/^"|"$/g, '');
+                        });
+
+                        if (transaction['Cardholder'] && transaction['Cardholder'].trim()) {
+                            allTransactions.push(transaction);
+                        }
+                    }
+
+                    // Populate employee filter with only those who have unassigned transactions
+                    populateEmployeeFilter();
+
+                    renderTable();
+                    updateStats();
+                    showMessage(`✓ Successfully imported ${allTransactions.length} transactions`, 'success');
+                } catch (error) {
+                    showMessage(`Error parsing CSV: ${error.message}`, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function populateEmployeeFilter() {
+            // Get all cardholders with unassigned status
+            const unassignedCardholders = new Set();
+            allTransactions.forEach(tx => {
+                if (getReportStatus(tx) === 'unassigned') {
+                    unassignedCardholders.add(tx['Cardholder']);
+                }
+            });
+
+            const select = document.getElementById('employeeFilter');
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">All Employees with Unassigned</option>';
+            
+            Array.from(unassignedCardholders).sort().forEach(emp => {
+                const option = document.createElement('option');
+                option.value = emp;
+                option.textContent = emp;
+                select.appendChild(option);
+            });
+            
+            select.value = currentValue;
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let insideQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    insideQuotes = !insideQuotes;
+                } else if (char === ',' && !insideQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result;
+        }
+
+        function updateStats() {
+            const filtered = getFilteredTransactions();
+            const uniqueEmps = new Set(filtered.map(t => t['Cardholder']));
+            const totalAmount = filtered.reduce((sum, t) => sum + (parseFloat(t['Amount (always in USD)']) || 0), 0);
+
+            document.getElementById('totalTransactions').textContent = allTransactions.length;
+            document.getElementById('unassignedTransactions').textContent = allTransactions.length;
+            document.getElementById('uniqueEmployees').textContent = employees.size;
+            document.getElementById('unassignedAmount').textContent = `$${totalAmount.toFixed(2)}`;
+        }
+
+        function getReportStatus(transaction) {
+            const reportStatus = (transaction['Report Status'] || '').toLowerCase().trim();
+            const submitted = transaction['Submitted Date'] && transaction['Submitted Date'].trim();
+            const approved = transaction['Approved by Finance Date'] && transaction['Approved by Finance Date'].trim();
+
+            if (reportStatus === 'paid') return 'paid';
+            if (submitted && !approved) return 'submitted';
+            if (!submitted) return 'unassigned';
+            return 'unassigned';
+        }
+
+        function getFilteredTransactions() {
+            const empFilter = document.getElementById('employeeFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            return allTransactions.filter(t => {
+                const matchesEmp = empFilter === '' || t['Cardholder'] === empFilter;
+                const matchesSearch = searchTerm === '' || 
+                    t['Cardholder'].toLowerCase().includes(searchTerm) ||
+                    (t['Employee ID'] || '').toLowerCase().includes(searchTerm) ||
+                    (t['Project Code'] || '').toLowerCase().includes(searchTerm);
+                const matchesStatus = statusFilter === '' || getReportStatus(t) === statusFilter;
+                return matchesEmp && matchesSearch && matchesStatus;
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const filtered = getFilteredTransactions();
+
+            if (allTransactions.length === 0) {
+                tbody.innerHTML = `<tr class="empty-state">
+                    <td colspan="8">
+                        <div class="empty-state-icon">📋</div>
+                        <h3>No data yet</h3>
+                        <p>Upload a CSV file to view transactions</p>
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr class="empty-state">
+                    <td colspan="8">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No results</h3>
+                        <p>Try adjusting your filters</p>
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach((tx, idx) => {
+                const amount = parseFloat(tx['Amount (always in USD)']) || 0;
+                const splitAmount = parseFloat(tx['Split Amount (USD)']) || 0;
+                const status = getReportStatus(tx);
+                let statusBadge = '';
+                
+                if (status === 'paid') {
+                    statusBadge = '<span class="badge badge-paid">✓ PAID</span>';
+                } else if (status === 'submitted') {
+                    statusBadge = '<span class="badge badge-submitted">⏳ SUBMITTED</span>';
+                } else if (status === 'unassigned') {
+                    statusBadge = '<span class="badge badge-unassigned">⚠️ UNASSIGNED</span>';
+                }
+
+                html += `
+                    <tr>
+                        <td>${statusBadge}</td>
+                        <td>${escapeHtml(tx['Posted Date'])}</td>
+                        <td>
+                            <div class="cardholder-info">
+                                <div class="cardholder-name">${escapeHtml(tx['Cardholder'])}</div>
+                            </div>
+                        </td>
+                        <td>${escapeHtml(tx['Project Code'])}</td>
+                        <td><span class="amount-highlight">$${amount.toFixed(2)}</span></td>
+                        <td>${splitAmount > 0 ? `$${splitAmount.toFixed(2)}` : '-'}</td>
+                        <td>${escapeHtml(tx['Merchant'])}</td>
+                        <td>${escapeHtml(tx['Approved by Finance Date'] || '-')}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function filterTable() {
+            renderTable();
+            updateStats();
+        }
+
+        function clearData() {
+            if (confirm('Clear all data? This cannot be undone.')) {
+                allTransactions = [];
+                employees.clear();
+                document.getElementById('employeeFilter').innerHTML = '<option value="">All Employees</option>';
+                document.getElementById('searchInput').value = '';
+                renderTable();
+                updateStats();
+                showMessage('Data cleared', 'success');
+            }
+        }
+
+        function exportPDF() {
+            const filtered = getFilteredTransactions();
+            
+            if (filtered.length === 0) {
+                showMessage('No transactions to export', 'error');
+                return;
+            }
+
+            const empFilter = document.getElementById('employeeFilter').value;
+            const fileName = empFilter ? `followup-${empFilter.replace(/\s+/g, '-')}.pdf` : 'expense-followup.pdf';
+
+            // Create HTML content for PDF
+            let htmlContent = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <h1 style="color: #0f172a; margin-bottom: 10px;">Expense Submission Followup</h1>
+                    <p style="color: #64748b; margin-bottom: 20px; font-size: 14px;">Generated on ${new Date().toLocaleDateString()}</p>
+                    
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px;">
+                                    <strong>Total Transactions:</strong> ${filtered.length}
+                                </td>
+                                <td style="padding: 8px;">
+                                    <strong>Total Amount:</strong> $${filtered.reduce((sum, t) => sum + (parseFloat(t['Amount (always in USD)']) || 0), 0).toFixed(2)}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                        <thead>
+                            <tr style="background: #e2e8f0; border-bottom: 2px solid #cbd5e1;">
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Report Status</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Posted Date</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Cardholder</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Project Code</th>
+                                <th style="padding: 12px; text-align: right; font-weight: 600; font-size: 12px; text-transform: uppercase;">Amount (USD)</th>
+                                <th style="padding: 12px; text-align: right; font-weight: 600; font-size: 12px; text-transform: uppercase;">Split Amount (USD)</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Merchant</th>
+                                <th style="padding: 12px; text-align: left; font-weight: 600; font-size: 12px; text-transform: uppercase;">Approved by Finance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            filtered.forEach((tx, idx) => {
+                const amount = parseFloat(tx['Amount (always in USD)']) || 0;
+                const splitAmount = parseFloat(tx['Split Amount (USD)']) || 0;
+                const status = getReportStatus(tx);
+                let statusText = '';
+                let statusColor = '';
+
+                if (status === 'paid') {
+                    statusText = 'PAID';
+                    statusColor = '#166534';
+                } else if (status === 'submitted') {
+                    statusText = 'SUBMITTED';
+                    statusColor = '#92400e';
+                } else if (status === 'unassigned') {
+                    statusText = 'UNASSIGNED';
+                    statusColor = '#991b1b';
+                }
+
+                const bgColor = idx % 2 === 0 ? '#ffffff' : '#f9fafb';
+
+                htmlContent += `
+                            <tr style="background: ${bgColor}; border-bottom: 1px solid #e2e8f0;">
+                                <td style="padding: 12px; font-size: 13px; color: ${statusColor}; font-weight: 600;">${statusText}</td>
+                                <td style="padding: 12px; font-size: 13px;">${escapeHtml(tx['Posted Date'])}</td>
+                                <td style="padding: 12px; font-size: 13px;">${escapeHtml(tx['Cardholder'])}</td>
+                                <td style="padding: 12px; font-size: 13px;">${escapeHtml(tx['Project Code'])}</td>
+                                <td style="padding: 12px; text-align: right; font-size: 13px; font-weight: 600;">$${amount.toFixed(2)}</td>
+                                <td style="padding: 12px; text-align: right; font-size: 13px;">${splitAmount > 0 ? `$${splitAmount.toFixed(2)}` : '-'}</td>
+                                <td style="padding: 12px; font-size: 13px;">${escapeHtml(tx['Merchant'])}</td>
+                                <td style="padding: 12px; font-size: 13px;">${escapeHtml(tx['Approved by Finance Date'] || '-')}</td>
+                            </tr>
+                `;
+            });
+
+            htmlContent += `
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 12px;">
+                        <p>This report contains unassigned expense submissions that require followup.</p>
+                    </div>
+                </div>
+            `;
+
+            // PDF options
+            const opt = {
+                margin: 10,
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
+            };
+
+            // Generate PDF
+            html2pdf().set(opt).from(htmlContent).save();
+            showMessage(`✓ PDF exported as ${fileName}`, 'success');
+        }
+
+        // Close modal when clicking outside
+    </script>
+</body>
+</html>
