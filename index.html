@@ -632,7 +632,13 @@ Just a quick reminder to please ensure that you log into Travel Bank and SUBMIT 
 
 Let me know if you need any help with this or run into any issues.`;
 
-        const DEFAULT_EMAIL_TEMPLATE_2 = ``;
+        const DEFAULT_EMAIL_TEMPLATE_2 = `MarineTeknik – Pending Travel Bank Submissions Requiring Manager's Approval
+
+Good day,
+
+Please be advised that your delegate has pending submissions awaiting your approval. Kindly log into your Travel Bank account to review and approve them at your earliest convenience.
+
+Thank you for your attention to this matter.`;
 
         function initEmailTemplates() {
             const saved1 = localStorage.getItem('emailTemplate1');
@@ -977,7 +983,8 @@ Let me know if you need any help with this or run into any issues.`;
             }
 
             const empFilter = document.getElementById('employeeFilter').value;
-            const fileName = empFilter ? `followup-${empFilter.replace(/\s+/g, '-')}.pdf` : 'expense-followup.pdf';
+            const today = new Date().toISOString().split('T')[0];
+            const fileName = empFilter ? `followup-${empFilter.replace(/\s+/g, '-')}-${today}.pdf` : `expense-followup-${today}.pdf`;
 
             // Create HTML content for PDF
             let htmlContent = `
