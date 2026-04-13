@@ -860,12 +860,11 @@ Let me know if you need any help with this or run into any issues.`;
 
         function getReportStatus(transaction) {
             const reportStatus = (transaction['Report Status'] || '').toLowerCase().trim();
-            const submitted = transaction['Submitted Date'] && transaction['Submitted Date'].trim();
-            const approved = transaction['Approved by Finance Date'] && transaction['Approved by Finance Date'].trim();
-
+            
             if (reportStatus === 'paid') return 'paid';
-            if (submitted && !approved) return 'submitted';
-            if (!submitted && !approved) return 'unassigned';
+            if (reportStatus === 'submitted') return 'submitted';
+            if (reportStatus === 'unassigned') return 'unassigned';
+            
             return 'unassigned';
         }
 
