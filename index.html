@@ -537,10 +537,10 @@
                 <div class="control-group">
                     <label>Filter by Report Status</label>
                     <select id="statusFilter" onchange="filterTable()">
-                        <option value="unassigned" selected>Unassigned</option>
                         <option value="">All Statuses</option>
-                        <option value="paid">Paid</option>
+                        <option value="unassigned">Unassigned</option>
                         <option value="submitted">Submitted</option>
+                        <option value="paid">Paid</option>
                     </select>
                 </div>
 
@@ -815,7 +815,7 @@ Let me know if you need any help with this or run into any issues.`;
 
             const select = document.getElementById('employeeFilter');
             const currentValue = select.value;
-            select.innerHTML = '<option value="">All Employees with Unassigned</option>';
+            select.innerHTML = '<option value="">All Employees</option>';
             
             Array.from(unassignedCardholders).sort().forEach(emp => {
                 const option = document.createElement('option');
@@ -848,13 +848,13 @@ Let me know if you need any help with this or run into any issues.`;
         }
 
         function updateStats() {
-            const filtered = getFilteredTransactions();
-            const uniqueEmps = new Set(filtered.map(t => t['Cardholder']));
-            const totalAmount = filtered.reduce((sum, t) => sum + (parseFloat(t['Amount (always in USD)']) || 0), 0);
+            const unassignedOnly = allTransactions.filter(t => getReportStatus(t) === 'unassigned');
+            const uniqueEmps = new Set(allTransactions.map(t => t['Cardholder']));
+            const totalAmount = unassignedOnly.reduce((sum, t) => sum + (parseFloat(t['Amount (always in USD)']) || 0), 0);
 
             document.getElementById('totalTransactions').textContent = allTransactions.length;
-            document.getElementById('unassignedTransactions').textContent = allTransactions.length;
-            document.getElementById('uniqueEmployees').textContent = employees.size;
+            document.getElementById('unassignedTransactions').textContent = unassignedOnly.length;
+            document.getElementById('uniqueEmployees').textContent = uniqueEmps.size;
             document.getElementById('unassignedAmount').textContent = `$${totalAmount.toFixed(2)}`;
         }
 
@@ -865,7 +865,7 @@ Let me know if you need any help with this or run into any issues.`;
 
             if (reportStatus === 'paid') return 'paid';
             if (submitted && !approved) return 'submitted';
-            if (!submitted) return 'unassigned';
+            if (!submitted && !approved) return 'unassigned';
             return 'unassigned';
         }
 
