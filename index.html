@@ -536,7 +536,7 @@
 
                 <div class="control-group">
                     <label>Filter by Report Status</label>
-                    <select id="statusFilter" onchange="filterTable()">
+                    <select id="statusFilter" onchange="populateEmployeeFilter(); filterTable();">
                         <option value="">All Statuses</option>
                         <option value="unassigned">Unassigned</option>
                         <option value="submitted">Submitted</option>
@@ -546,7 +546,7 @@
 
                 <div class="control-group">
                     <label>Filter by Employee</label>
-                    <select id="employeeFilter" onchange="filterTable()">
+                    <select id="employeeFilter" multiple onchange="filterTable()">
                         <option value="">All Employees</option>
                     </select>
                 </div>
@@ -811,11 +811,14 @@ Thank you for your attention to this matter.`;
         }
 
         function populateEmployeeFilter() {
-            // Get all cardholders with unassigned status
-            const unassignedCardholders = new Set();
+            const statusFilter = document.getElementById('statusFilter').value || '';
+            const matchingCardholders = new Set();
+            
             allTransactions.forEach(tx => {
-                if (getReportStatus(tx) === 'unassigned') {
-                    unassignedCardholders.add(tx['Cardholder']);
+                const txStatus = getReportStatus(tx);
+                // If no status filter selected, show all; otherwise match the selected status
+                if (statusFilter === '' || txStatus === statusFilter) {
+                    matchingCardholders.add(tx['Cardholder']);
                 }
             });
 
@@ -823,7 +826,7 @@ Thank you for your attention to this matter.`;
             const currentValue = select.value;
             select.innerHTML = '<option value="">All Employees</option>';
             
-            Array.from(unassignedCardholders).sort().forEach(emp => {
+            Array.from(matchingCardholders).sort().forEach(emp => {
                 const option = document.createElement('option');
                 option.value = emp;
                 option.textContent = emp;
@@ -875,12 +878,13 @@ Thank you for your attention to this matter.`;
         }
 
         function getFilteredTransactions() {
-            const empFilter = document.getElementById('employeeFilter').value;
+            const empSelect = document.getElementById('employeeFilter');
+            const empFilters = Array.from(empSelect.selectedOptions).map(opt => opt.value).filter(v => v !== '');
             const statusFilter = document.getElementById('statusFilter').value;
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
             return allTransactions.filter(t => {
-                const matchesEmp = empFilter === '' || t['Cardholder'] === empFilter;
+                const matchesEmp = empFilters.length === 0 || empFilters.includes(t['Cardholder']);
                 const matchesSearch = searchTerm === '' || 
                     t['Cardholder'].toLowerCase().includes(searchTerm) ||
                     (t['Employee ID'] || '').toLowerCase().includes(searchTerm) ||
