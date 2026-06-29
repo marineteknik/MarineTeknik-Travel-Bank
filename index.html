@@ -122,7 +122,6 @@
         <div class="stat"><div class="stat-label">Unassigned Amount</div><div class="stat-value blue" id="sAmt">$0</div></div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <div id="msgBox"></div>
@@ -167,7 +166,6 @@
                 <button class="btn-blue" onclick="doImport()">📥 Load Data</button>
                 <button class="btn-gray" onclick="copyTable()">📋 Copy Table</button>
                 <button class="btn-gray" onclick="showEmailModal()">✉️ Email Templates</button>
-                <button class="btn-gray" onclick="doPDF()">📄 Export PDF</button>
                 <button class="btn-gray" onclick="doClear()">🗑️ Clear</button>
             </div>
         </div>
@@ -354,29 +352,30 @@ function msFilter() {
 function msRenderList(emps) {
     const list = document.getElementById('msList');
     if (!emps.length) { list.innerHTML = '<div class="ms-empty">No employees found</div>'; return; }
-    list.innerHTML = emps.map(e => {
-        const chk = selected.has(e) ? 'checked' : '';
-        const esc = e.replace(/"/g,'&quot;');
-        return `<div class="ms-item" onclick="msPick(${JSON.stringify(e)},event)">
-            <input type="checkbox" ${chk} onclick="event.stopPropagation()" onchange="msPick(${JSON.stringify(e)},event)">
-            <span>${escHtml(e)}</span>
-        </div>`;
-    }).join('');
+    list.innerHTML = '';
+    emps.forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'ms-item';
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.checked = selected.has(e);
+        chk.addEventListener('click', ev => ev.stopPropagation());
+        const span = document.createElement('span');
+        span.textContent = e;
+        div.appendChild(chk);
+        div.appendChild(span);
+        div.addEventListener('click', () => {
+            if (selected.has(e)) selected.delete(e);
+            else selected.add(e);
+            chk.checked = selected.has(e);
+            msUpdateBtn();
+            render();
+        });
+        list.appendChild(div);
+    });
 }
 
-function msPick(emp, e) {
-    e.stopPropagation();
-    selected.has(emp) ? selected.delete(emp) : selected.add(emp);
-    // sync checkbox
-    const items = document.querySelectorAll('#msList .ms-item');
-    items.forEach(item => {
-        if (item.querySelector('span').textContent === emp) {
-            item.querySelector('input').checked = selected.has(emp);
-        }
-    });
-    msUpdateBtn();
-    render();
-}
+
 
 function msSelectAll() {
     const q = document.getElementById('msSearch').value.toLowerCase();
@@ -534,44 +533,6 @@ function copyTable() {
     }).catch(() => { msg('Error',true); document.body.removeChild(wrap); });
 }
 
-function doPDF() {
-    const filtered = getFiltered();
-    if (!filtered.length) { msg('No data to export', true); return; }
-    const today = new Date().toISOString().split('T')[0];
-    const label = selected.size===1 ? [...selected][0].replace(/\s+/g,'-') : selected.size>1 ? selected.size+'-employees' : 'all';
-    const fname = `expense-followup-${label}-${today}.pdf`;
-    const bodyRows = filtered.map((r,i) => {
-        const s=status(r), a=amt(r), sp=split(r);
-        const sc = s==='paid'?'#166534':s==='submitted'?'#92400e':'#991b1b';
-        const st = s==='paid'?'PAID':s==='submitted'?'SUBMITTED':'UNASSIGNED';
-        return `<tr style="background:${i%2?'#f9fafb':'#fff'};border-bottom:1px solid #e2e8f0;">
-            <td style="padding:9px;color:${sc};font-weight:600;font-size:12px;">${st}</td>
-            <td style="padding:9px;font-size:12px;">${escHtml(g(r,'Posted Date'))}</td>
-            <td style="padding:9px;font-size:12px;">${escHtml(g(r,'Cardholder'))}</td>
-            <td style="padding:9px;font-size:12px;">${escHtml(g(r,'Project Code'))}</td>
-            <td style="padding:9px;text-align:right;font-size:12px;font-weight:600;">$${a.toFixed(2)}</td>
-            <td style="padding:9px;text-align:right;font-size:12px;">${sp>0?'$'+sp.toFixed(2):'—'}</td>
-            <td style="padding:9px;font-size:12px;">${escHtml(g(r,'Merchant'))}</td>
-            <td style="padding:9px;font-size:12px;">${escHtml(g(r,'Finance','—'))}</td>
-        </tr>`;
-    }).join('');
-    const html = `<div style="font-family:Arial,sans-serif;padding:20px;">
-        <h2 style="margin-bottom:6px;">Expense Followup Report</h2>
-        <p style="color:#64748b;font-size:13px;margin-bottom:18px;">${new Date().toLocaleDateString()} · ${filtered.length} transactions</p>
-        <table style="width:100%;border-collapse:collapse;">
-        <thead><tr style="background:#e2e8f0;">
-            <th style="padding:9px;font-size:11px;text-align:left;">Status</th>
-            <th style="padding:9px;font-size:11px;text-align:left;">Posted</th>
-            <th style="padding:9px;font-size:11px;text-align:left;">Cardholder</th>
-            <th style="padding:9px;font-size:11px;text-align:left;">Project</th>
-            <th style="padding:9px;font-size:11px;text-align:right;">Amount</th>
-            <th style="padding:9px;font-size:11px;text-align:right;">Split</th>
-            <th style="padding:9px;font-size:11px;text-align:left;">Merchant</th>
-            <th style="padding:9px;font-size:11px;text-align:left;">Finance Approved</th>
-        </tr></thead><tbody>${bodyRows}</tbody></table></div>`;
-    html2pdf().set({margin:8,filename:fname,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2},jsPDF:{orientation:'landscape',unit:'mm',format:'a4'}}).from(html).save();
-    msg('✓ PDF exported');
-}
 </script>
 </body>
 </html>
