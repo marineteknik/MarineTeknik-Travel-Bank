@@ -55,7 +55,6 @@
         tbody tr:last-child td { border-bottom: none; }
         .cardholder-info { display: flex; flex-direction: column; gap: 2px; }
         .cardholder-name { font-weight: 600; color: var(--text-primary); }
-        .emp-id { color: var(--text-secondary); font-size: 12px; font-family: 'Monaco', monospace; }
         .amount-highlight { font-weight: 600; color: var(--accent); }
         .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
         .badge-paid { background: #dcfce7; color: #166534; }
@@ -64,6 +63,63 @@
         .empty-state { padding: 60px 20px; text-align: center; color: var(--text-secondary); }
         .empty-state-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
         .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+
+        /* ── Checkbox multiselect dropdown ── */
+        .multiselect-wrapper { position: relative; }
+        .multiselect-trigger {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px;
+            font-size: 14px; font-family: inherit; background: white; cursor: pointer;
+            transition: all 0.2s ease; user-select: none; min-height: 42px;
+        }
+        .multiselect-trigger:hover { border-color: var(--accent); background: var(--gray-50); }
+        .multiselect-trigger.open { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+        .multiselect-trigger-text { color: var(--text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .multiselect-trigger-text.placeholder { color: #94a3b8; }
+        .multiselect-arrow { color: var(--text-secondary); font-size: 11px; margin-left: 8px; transition: transform 0.2s; flex-shrink: 0; }
+        .multiselect-trigger.open .multiselect-arrow { transform: rotate(180deg); }
+        .multiselect-dropdown {
+            display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+            background: white; border: 1px solid var(--border); border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 200; overflow: hidden;
+        }
+        .multiselect-dropdown.open { display: block; }
+        .multiselect-search {
+            padding: 10px 12px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .multiselect-search input {
+            border: none; outline: none; font-size: 13px; flex: 1;
+            font-family: inherit; background: transparent; padding: 0;
+            box-shadow: none;
+        }
+        .multiselect-actions {
+            display: flex; gap: 0; border-bottom: 1px solid var(--border);
+        }
+        .multiselect-action-btn {
+            flex: 1; padding: 7px 10px; border: none; background: var(--gray-50);
+            font-size: 11px; font-weight: 600; color: var(--accent); cursor: pointer;
+            transition: background 0.15s; letter-spacing: 0.3px;
+        }
+        .multiselect-action-btn:hover { background: var(--gray-100); }
+        .multiselect-action-btn + .multiselect-action-btn { border-left: 1px solid var(--border); }
+        .multiselect-list { max-height: 220px; overflow-y: auto; }
+        .multiselect-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px; cursor: pointer; transition: background 0.15s;
+            font-size: 13px;
+        }
+        .multiselect-item:hover { background: var(--gray-50); }
+        .multiselect-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+        .multiselect-item label { cursor: pointer; flex: 1; color: var(--text-primary); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+        .multiselect-empty { padding: 20px 12px; text-align: center; color: var(--text-secondary); font-size: 13px; }
+        .multiselect-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: var(--accent); color: white; border-radius: 10px;
+            font-size: 11px; font-weight: 700; padding: 1px 7px; margin-left: 6px; flex-shrink: 0;
+        }
+
+        /* ── Email templates modal ── */
         .email-templates-section { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
         .email-templates-container { background: white; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.3); width: 90%; max-width: 700px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
         .email-templates-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border); }
@@ -78,6 +134,7 @@
         .email-template-textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
         .email-template-actions { display: flex; gap: 8px; padding: 16px; border-top: 1px solid var(--border); background: var(--gray-50); }
         .email-template-actions button { flex: 1; }
+
         @media (max-width: 768px) {
             h1 { font-size: 24px; }
             .controls-grid { grid-template-columns: 1fr; }
@@ -125,7 +182,7 @@
             </div>
             <div class="control-group">
                 <label>Filter by Report Status</label>
-                <select id="statusFilter" onchange="populateEmployeeFilter(); filterTable();">
+                <select id="statusFilter" onchange="populateEmployeeDropdown(); filterTable();">
                     <option value="">All Statuses</option>
                     <option value="unassigned">Unassigned</option>
                     <option value="submitted">Submitted</option>
@@ -134,9 +191,23 @@
             </div>
             <div class="control-group">
                 <label>Filter by Employee</label>
-                <select id="employeeFilter" multiple onchange="filterTable()">
-                    <option value="">All Employees</option>
-                </select>
+                <div class="multiselect-wrapper" id="empMultiWrapper">
+                    <div class="multiselect-trigger" id="empTrigger" onclick="toggleEmpDropdown()">
+                        <span class="multiselect-trigger-text placeholder" id="empTriggerText">All Employees</span>
+                        <span class="multiselect-arrow">▼</span>
+                    </div>
+                    <div class="multiselect-dropdown" id="empDropdown">
+                        <div class="multiselect-search">
+                            <span style="color:#94a3b8;font-size:13px;">🔍</span>
+                            <input type="text" id="empSearch" placeholder="Search employees..." oninput="filterEmpList()">
+                        </div>
+                        <div class="multiselect-actions">
+                            <button class="multiselect-action-btn" onclick="selectAllEmployees()">Select All</button>
+                            <button class="multiselect-action-btn" onclick="clearAllEmployees()">Clear All</button>
+                        </div>
+                        <div class="multiselect-list" id="empList"></div>
+                    </div>
+                </div>
             </div>
             <div class="control-group">
                 <label>Search</label>
@@ -152,7 +223,7 @@
         </div>
     </div>
 
-    <!-- Email Templates Section -->
+    <!-- Email Templates Modal -->
     <div id="emailTemplatesSection" class="email-templates-section" style="display: none;">
         <div class="email-templates-container">
             <div class="email-templates-header">
@@ -204,10 +275,10 @@
     let allTransactions = [];
     let employees = new Set();
     let currentTemplate = 'template1';
+    let selectedEmployees = new Set(); // tracks checked employees
+    let availableEmployees = [];       // ordered list for current status filter
 
     // ── Field aliases ────────────────────────────────────────────────────────
-    // Maps the logical field name used in this app → array of possible CSV
-    // header names (checked in order, first match wins).
     const FIELD_ALIASES = {
         'Posted Date':              ['Posted Date'],
         'Employee ID':              ['Employee ID'],
@@ -217,18 +288,27 @@
         'Split Amount (USD)':       ['Split Amount (USD)', 'Split Amount'],
         'Merchant':                 ['Merchant'],
         'Approved by Finance Date': ['Approved by Finance Date'],
+        'Approved by Manager Date': ['Approved by Manager Date'],
+        'Submitted Date':           ['Submitted Date'],
+        'Transaction Date':         ['Transaction Date'],
         'Report Status':            ['Report Status'],
     };
 
-    // Resolved map: logical name → actual CSV header found in current file
+    const STRIP_LEADING_COLUMNS = [
+        'Transaction successfully paired.',
+        'Transaction Successfully Paired.',
+        'transaction successfully paired.',
+    ];
+
     let resolvedFields = {};
 
-    /**
-     * After loading headers, resolve each alias to the first matching header.
-     */
     function resolveFields(headers) {
         resolvedFields = {};
-        const headerSet = new Set(headers.map(h => h.trim()));
+        let cleaned = [...headers];
+        if (cleaned.length > 0 && STRIP_LEADING_COLUMNS.includes(cleaned[0].trim())) {
+            cleaned.shift();
+        }
+        const headerSet = new Set(cleaned.map(h => h.trim()));
         for (const [logical, candidates] of Object.entries(FIELD_ALIASES)) {
             for (const candidate of candidates) {
                 if (headerSet.has(candidate)) {
@@ -236,16 +316,131 @@
                     break;
                 }
             }
-            // If none matched, logical stays undefined — handled gracefully below
         }
+        return cleaned;
     }
 
-    /** Get a field value from a transaction using the logical field name. */
     function getField(tx, logicalName, fallback = '') {
         const header = resolvedFields[logicalName];
         if (!header) return fallback;
-        return (tx[header] || fallback).toString().trim();
+        return (tx[header] !== undefined ? tx[header] : fallback).toString().trim();
     }
+
+    // ── Employee multiselect ─────────────────────────────────────────────────
+    function toggleEmpDropdown() {
+        const trigger = document.getElementById('empTrigger');
+        const dropdown = document.getElementById('empDropdown');
+        const isOpen = dropdown.classList.contains('open');
+        if (isOpen) {
+            closeEmpDropdown();
+        } else {
+            trigger.classList.add('open');
+            dropdown.classList.add('open');
+            document.getElementById('empSearch').value = '';
+            filterEmpList();
+            setTimeout(() => document.getElementById('empSearch').focus(), 50);
+        }
+    }
+
+    function closeEmpDropdown() {
+        document.getElementById('empTrigger').classList.remove('open');
+        document.getElementById('empDropdown').classList.remove('open');
+    }
+
+    function populateEmployeeDropdown() {
+        const statusFilter = document.getElementById('statusFilter').value || '';
+        const matchingCardholders = new Set();
+        allTransactions.forEach(tx => {
+            const txStatus = getReportStatus(tx);
+            if (statusFilter === '' || txStatus === statusFilter) {
+                matchingCardholders.add(getField(tx, 'Cardholder'));
+            }
+        });
+        availableEmployees = Array.from(matchingCardholders).sort();
+
+        // Remove any selected employees no longer in the filtered set
+        selectedEmployees.forEach(emp => {
+            if (!matchingCardholders.has(emp)) selectedEmployees.delete(emp);
+        });
+
+        renderEmpList(availableEmployees);
+        updateEmpTriggerLabel();
+    }
+
+    function renderEmpList(emps) {
+        const list = document.getElementById('empList');
+        if (emps.length === 0) {
+            list.innerHTML = '<div class="multiselect-empty">No employees found</div>';
+            return;
+        }
+        list.innerHTML = emps.map(emp => `
+            <div class="multiselect-item" onclick="toggleEmployee('${emp.replace(/'/g, "\\'")}', event)">
+                <input type="checkbox" id="chk_${CSS.escape(emp)}" ${selectedEmployees.has(emp) ? 'checked' : ''}
+                    onchange="toggleEmployee('${emp.replace(/'/g, "\\'")}', event)" onclick="event.stopPropagation()">
+                <label for="chk_${CSS.escape(emp)}">${escapeHtml(emp)}</label>
+            </div>
+        `).join('');
+    }
+
+    function filterEmpList() {
+        const q = document.getElementById('empSearch').value.toLowerCase();
+        const filtered = availableEmployees.filter(e => e.toLowerCase().includes(q));
+        renderEmpList(filtered);
+    }
+
+    function toggleEmployee(emp, event) {
+        event.stopPropagation();
+        if (selectedEmployees.has(emp)) {
+            selectedEmployees.delete(emp);
+        } else {
+            selectedEmployees.add(emp);
+        }
+        // Sync checkbox state
+        const chk = document.getElementById('chk_' + CSS.escape(emp));
+        if (chk) chk.checked = selectedEmployees.has(emp);
+        updateEmpTriggerLabel();
+        filterTable();
+    }
+
+    function selectAllEmployees() {
+        const q = document.getElementById('empSearch').value.toLowerCase();
+        const visible = availableEmployees.filter(e => e.toLowerCase().includes(q));
+        visible.forEach(e => selectedEmployees.add(e));
+        filterEmpList();
+        updateEmpTriggerLabel();
+        filterTable();
+    }
+
+    function clearAllEmployees() {
+        selectedEmployees.clear();
+        filterEmpList();
+        updateEmpTriggerLabel();
+        filterTable();
+    }
+
+    function updateEmpTriggerLabel() {
+        const triggerText = document.getElementById('empTriggerText');
+        const count = selectedEmployees.size;
+        if (count === 0) {
+            triggerText.innerHTML = 'All Employees';
+            triggerText.className = 'multiselect-trigger-text placeholder';
+        } else if (count === 1) {
+            const name = Array.from(selectedEmployees)[0];
+            triggerText.innerHTML = escapeHtml(name);
+            triggerText.className = 'multiselect-trigger-text';
+        } else {
+            triggerText.innerHTML = `${count} employees selected <span class="multiselect-badge">${count}</span>`;
+            triggerText.className = 'multiselect-trigger-text';
+        }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#empMultiWrapper')) closeEmpDropdown();
+        if (!e.target.closest('.email-templates-section') && !e.target.closest('[onclick="toggleEmailTemplates()"]')) {
+            // don't close email modal here
+        }
+    });
 
     // ── Email templates ──────────────────────────────────────────────────────
     const DEFAULT_EMAIL_TEMPLATE_1 = `REMINDER: Submit Credit Card Transactions on Travel Bank
@@ -342,14 +537,14 @@ Thank you for your attention to this matter.`;
                 const csv = e.target.result;
                 const lines = csv.split('\n');
 
-                // Parse raw headers — strip BOM, quotes, trim whitespace
                 const rawHeaders = lines[0]
-                    .replace(/^\uFEFF/, '')          // remove UTF-8 BOM if present
+                    .replace(/^\uFEFF/, '')
                     .split(',')
                     .map(h => h.trim().replace(/^"|"$/g, ''));
 
-                // Resolve logical → actual header names for this file
-                resolveFields(rawHeaders);
+                const cleanedHeaders = resolveFields(rawHeaders);
+                const strippedLeading = cleanedHeaders.length < rawHeaders.length;
+                const dataStartCol = strippedLeading ? 1 : 0;
 
                 allTransactions = [];
                 employees.clear();
@@ -358,20 +553,22 @@ Thank you for your attention to this matter.`;
                     if (!lines[i].trim()) continue;
                     const values = parseCSVLine(lines[i]);
                     const tx = {};
-                    rawHeaders.forEach((header, idx) => {
-                        tx[header] = (values[idx] || '').trim().replace(/^"|"$/g, '');
+                    cleanedHeaders.forEach((header, idx) => {
+                        tx[header] = (values[idx + dataStartCol] || '').trim().replace(/^"|"$/g, '');
                     });
-                    // Only include rows that have a Cardholder value
                     const cardholder = getField(tx, 'Cardholder');
                     if (cardholder) {
                         allTransactions.push(tx);
                     }
                 }
 
-                populateEmployeeFilter();
+                selectedEmployees.clear();
+                populateEmployeeDropdown();
                 renderTable();
                 updateStats();
-                showMessage(`✓ Successfully imported ${allTransactions.length} transactions`, 'success');
+
+                const strippedMsg = strippedLeading ? ' (leading status column auto-removed)' : '';
+                showMessage(`✓ Successfully imported ${allTransactions.length} transactions${strippedMsg}`, 'success');
             } catch (error) {
                 showMessage(`Error parsing CSV: ${error.message}`, 'error');
             }
@@ -425,31 +622,7 @@ Thank you for your attention to this matter.`;
         return parseFloat(getField(tx, 'Split Amount (USD)', '0')) || 0;
     }
 
-    function populateEmployeeFilter() {
-        const statusFilter = document.getElementById('statusFilter').value || '';
-        const matchingCardholders = new Set();
-        allTransactions.forEach(tx => {
-            const txStatus = getReportStatus(tx);
-            if (statusFilter === '' || txStatus === statusFilter) {
-                matchingCardholders.add(getField(tx, 'Cardholder'));
-            }
-        });
-
-        const select = document.getElementById('employeeFilter');
-        const currentValue = select.value;
-        select.innerHTML = '<option value="">All Employees</option>';
-        Array.from(matchingCardholders).sort().forEach(emp => {
-            const option = document.createElement('option');
-            option.value = emp;
-            option.textContent = emp;
-            select.appendChild(option);
-        });
-        select.value = currentValue;
-    }
-
     function getFilteredTransactions() {
-        const empSelect = document.getElementById('employeeFilter');
-        const empFilters = Array.from(empSelect.selectedOptions).map(opt => opt.value).filter(v => v !== '');
         const statusFilter = document.getElementById('statusFilter').value;
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
@@ -457,7 +630,7 @@ Thank you for your attention to this matter.`;
             const cardholder = getField(t, 'Cardholder');
             const empId = getField(t, 'Employee ID');
             const projectCode = getField(t, 'Project Code');
-            const matchesEmp = empFilters.length === 0 || empFilters.includes(cardholder);
+            const matchesEmp = selectedEmployees.size === 0 || selectedEmployees.has(cardholder);
             const matchesSearch = searchTerm === '' ||
                 cardholder.toLowerCase().includes(searchTerm) ||
                 empId.toLowerCase().includes(searchTerm) ||
@@ -526,7 +699,10 @@ Thank you for your attention to this matter.`;
             allTransactions = [];
             employees.clear();
             resolvedFields = {};
-            document.getElementById('employeeFilter').innerHTML = '<option value="">All Employees</option>';
+            selectedEmployees.clear();
+            availableEmployees = [];
+            document.getElementById('empList').innerHTML = '';
+            updateEmpTriggerLabel();
             document.getElementById('searchInput').value = '';
             renderTable();
             updateStats();
@@ -573,11 +749,11 @@ Thank you for your attention to this matter.`;
         const filtered = getFilteredTransactions();
         if (filtered.length === 0) { showMessage('No transactions to export', 'error'); return; }
 
-        const empFilter = document.getElementById('employeeFilter').value;
         const today = new Date().toISOString().split('T')[0];
-        const fileName = empFilter
-            ? `followup-${empFilter.replace(/\s+/g, '-')}-${today}.pdf`
-            : `expense-followup-${today}.pdf`;
+        const empLabel = selectedEmployees.size === 1
+            ? Array.from(selectedEmployees)[0].replace(/\s+/g, '-')
+            : selectedEmployees.size > 1 ? `${selectedEmployees.size}-employees` : 'all';
+        const fileName = `expense-followup-${empLabel}-${today}.pdf`;
 
         let htmlContent = `
             <div style="font-family:Arial,sans-serif;padding:20px;color:#333;">
