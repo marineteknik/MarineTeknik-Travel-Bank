@@ -70,7 +70,7 @@
         .multiselect-trigger-text.placeholder { color: #94a3b8; }
         .multiselect-arrow { color: var(--text-secondary); font-size: 11px; margin-left: 8px; transition: transform 0.2s; flex-shrink: 0; }
         .multiselect-trigger.open .multiselect-arrow { transform: rotate(180deg); }
-        .multiselect-dropdown { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 200; overflow: hidden; min-width: 260px; }
+        .multiselect-dropdown { display: none; position: fixed; background: white; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.18); z-index: 9999; overflow: hidden; min-width: 260px; }
         .multiselect-dropdown.open { display: block; }
         .multiselect-search { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
         .multiselect-search input { border: none; outline: none; font-size: 13px; flex: 1; font-family: inherit; background: transparent; padding: 0; }
@@ -149,17 +149,7 @@
                         <span class="multiselect-trigger-text placeholder" id="empTriggerText">All Employees</span>
                         <span class="multiselect-arrow">▼</span>
                     </div>
-                    <div class="multiselect-dropdown" id="empDropdown">
-                        <div class="multiselect-search">
-                            <span style="color:#94a3b8;font-size:13px;">🔍</span>
-                            <input type="text" id="empSearch" placeholder="Search employees..." oninput="filterEmpList()">
-                        </div>
-                        <div class="multiselect-actions">
-                            <button class="multiselect-action-btn" onclick="selectAllEmployees()">Select All</button>
-                            <button class="multiselect-action-btn" onclick="clearAllEmployees()">Clear All</button>
-                        </div>
-                        <div class="multiselect-list" id="empList"></div>
-                    </div>
+
                 </div>
             </div>
             <div class="control-group">
@@ -386,6 +376,11 @@
         if (isOpen) {
             closeEmpDropdown();
         } else {
+            // Position dropdown using fixed coords from trigger's screen position
+            const rect = trigger.getBoundingClientRect();
+            dropdown.style.top = (rect.bottom + 4) + 'px';
+            dropdown.style.left = rect.left + 'px';
+            dropdown.style.width = Math.max(rect.width, 260) + 'px';
             trigger.classList.add('open');
             dropdown.classList.add('open');
             document.getElementById('empSearch').value = '';
@@ -396,7 +391,7 @@
 
     function closeEmpDropdown() {
         document.getElementById('empTrigger').classList.remove('open');
-        document.getElementById('empDropdown').classList.remove('open');
+        document.getElementById('empDropdown').style.display = 'none';
     }
 
     function populateEmployeeDropdown() {
@@ -686,5 +681,19 @@ Thank you for your attention to this matter.`
         showMessage(`✓ PDF exported as ${fileName}`, 'success');
     }
 </script>
+
+    <!-- Employee dropdown — appended to body to avoid clipping -->
+    <div id="empDropdown" style="display:none;position:fixed;background:white;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:99999;min-width:260px;flex-direction:column;">
+        <div style="padding:10px 12px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;gap:8px;">
+            <span style="color:#94a3b8;font-size:13px;">🔍</span>
+            <input type="text" id="empSearch" placeholder="Search employees..." oninput="filterEmpList()"
+                style="border:none;outline:none;font-size:13px;flex:1;font-family:inherit;background:transparent;padding:0;">
+        </div>
+        <div style="display:flex;border-bottom:1px solid #e2e8f0;flex-shrink:0;">
+            <button onclick="selectAllEmployees()" style="flex:1;padding:7px 10px;border:none;background:#f8fafc;font-size:11px;font-weight:600;color:#2563eb;cursor:pointer;">Select All</button>
+            <button onclick="clearAllEmployees()" style="flex:1;padding:7px 10px;border:none;background:#f8fafc;font-size:11px;font-weight:600;color:#2563eb;cursor:pointer;border-left:1px solid #e2e8f0;">Clear All</button>
+        </div>
+        <div id="empList" style="max-height:280px;overflow-y:auto;"></div>
+    </div>
 </body>
 </html>
