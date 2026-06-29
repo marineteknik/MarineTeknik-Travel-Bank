@@ -38,8 +38,6 @@
         .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,.3); }
         .btn-secondary { background: var(--gray-100); color: var(--text-primary); border: 1px solid var(--border); }
         .btn-secondary:hover { background: var(--gray-200); }
-        .btn-success { background: var(--success); color: white; }
-        .btn-success:hover { background: #047857; transform: translateY(-1px); }
         .btn-small { padding: 6px 10px; font-size: 12px; }
         .message { padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; animation: slideDown 0.3s ease-out; }
         .message.success { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
@@ -53,7 +51,6 @@
         tbody tr { transition: background-color 0.2s ease; }
         tbody tr:hover { background: var(--gray-50); }
         tbody tr:last-child td { border-bottom: none; }
-        .cardholder-info { display: flex; flex-direction: column; gap: 2px; }
         .cardholder-name { font-weight: 600; color: var(--text-primary); }
         .amount-highlight { font-weight: 600; color: var(--accent); }
         .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
@@ -64,73 +61,41 @@
         .empty-state-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
         .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
 
-        /* ── Checkbox multiselect dropdown ── */
+        /* Multiselect dropdown */
         .multiselect-wrapper { position: relative; }
-        .multiselect-trigger {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px;
-            font-size: 14px; font-family: inherit; background: white; cursor: pointer;
-            transition: all 0.2s ease; user-select: none; min-height: 42px;
-        }
+        .multiselect-trigger { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: white; cursor: pointer; transition: all 0.2s; user-select: none; min-height: 42px; }
         .multiselect-trigger:hover { border-color: var(--accent); background: var(--gray-50); }
         .multiselect-trigger.open { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
         .multiselect-trigger-text { color: var(--text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
         .multiselect-trigger-text.placeholder { color: #94a3b8; }
         .multiselect-arrow { color: var(--text-secondary); font-size: 11px; margin-left: 8px; transition: transform 0.2s; flex-shrink: 0; }
         .multiselect-trigger.open .multiselect-arrow { transform: rotate(180deg); }
-        .multiselect-dropdown {
-            display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
-            background: white; border: 1px solid var(--border); border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 200; overflow: hidden;
-        }
+        .multiselect-dropdown { display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: white; border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.12); z-index: 200; overflow: hidden; min-width: 260px; }
         .multiselect-dropdown.open { display: block; }
-        .multiselect-search {
-            padding: 10px 12px; border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; gap: 8px;
-        }
-        .multiselect-search input {
-            border: none; outline: none; font-size: 13px; flex: 1;
-            font-family: inherit; background: transparent; padding: 0;
-            box-shadow: none;
-        }
-        .multiselect-actions {
-            display: flex; gap: 0; border-bottom: 1px solid var(--border);
-        }
-        .multiselect-action-btn {
-            flex: 1; padding: 7px 10px; border: none; background: var(--gray-50);
-            font-size: 11px; font-weight: 600; color: var(--accent); cursor: pointer;
-            transition: background 0.15s; letter-spacing: 0.3px;
-        }
+        .multiselect-search { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+        .multiselect-search input { border: none; outline: none; font-size: 13px; flex: 1; font-family: inherit; background: transparent; padding: 0; }
+        .multiselect-actions { display: flex; border-bottom: 1px solid var(--border); }
+        .multiselect-action-btn { flex: 1; padding: 7px 10px; border: none; background: var(--gray-50); font-size: 11px; font-weight: 600; color: var(--accent); cursor: pointer; transition: background 0.15s; }
         .multiselect-action-btn:hover { background: var(--gray-100); }
         .multiselect-action-btn + .multiselect-action-btn { border-left: 1px solid var(--border); }
         .multiselect-list { max-height: 220px; overflow-y: auto; }
-        .multiselect-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 9px 12px; cursor: pointer; transition: background 0.15s;
-            font-size: 13px;
-        }
+        .multiselect-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; transition: background 0.15s; font-size: 13px; }
         .multiselect-item:hover { background: var(--gray-50); }
         .multiselect-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
-        .multiselect-item label { cursor: pointer; flex: 1; color: var(--text-primary); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 400; }
+        .multiselect-item label { cursor: pointer; flex: 1; color: var(--text-primary); font-size: 13px; text-transform: none; letter-spacing: 0; font-weight: 400; margin: 0; }
         .multiselect-empty { padding: 20px 12px; text-align: center; color: var(--text-secondary); font-size: 13px; }
-        .multiselect-badge {
-            display: inline-flex; align-items: center; justify-content: center;
-            background: var(--accent); color: white; border-radius: 10px;
-            font-size: 11px; font-weight: 700; padding: 1px 7px; margin-left: 6px; flex-shrink: 0;
-        }
+        .multiselect-badge { display: inline-flex; align-items: center; justify-content: center; background: var(--accent); color: white; border-radius: 10px; font-size: 11px; font-weight: 700; padding: 1px 7px; margin-left: 6px; flex-shrink: 0; }
 
-        /* ── Email templates modal ── */
-        .email-templates-section { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 1000; animation: fadeIn 0.2s ease; }
+        /* Email modal */
+        .email-templates-section { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .email-templates-container { background: white; border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,.3); width: 90%; max-width: 700px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; }
         .email-templates-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border); }
         .email-templates-header h2 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin: 0; }
-        .templates-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--gray-50); }
-        .template-tab { flex: 1; padding: 12px 16px; border: none; background: none; color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s ease; }
-        .template-tab:hover { color: var(--text-primary); background: white; }
+        .templates-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--gray-50); }
+        .template-tab { flex: 1; padding: 12px 16px; border: none; background: none; color: var(--text-secondary); font-size: 13px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
         .template-tab.active { color: var(--accent); border-bottom-color: var(--accent); background: white; }
-        .close-template-btn { background: none; border: none; font-size: 28px; color: var(--text-secondary); cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s ease; }
-        .close-template-btn:hover { color: var(--text-primary); }
-        .email-template-textarea { flex: 1; padding: 16px; border: none; font-family: 'Aptos', 'Calibri', Arial, sans-serif; font-size: 13px; line-height: 1.6; resize: none; color: var(--text-primary); }
+        .close-template-btn { background: none; border: none; font-size: 28px; color: var(--text-secondary); cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+        .email-template-textarea { flex: 1; padding: 16px; border: none; font-family: 'Aptos', 'Calibri', Arial, sans-serif; font-size: 13px; line-height: 1.6; resize: none; color: var(--text-primary); min-height: 200px; }
         .email-template-textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--accent); }
         .email-template-actions { display: flex; gap: 8px; padding: 16px; border-top: 1px solid var(--border); background: var(--gray-50); }
         .email-template-actions button { flex: 1; }
@@ -150,22 +115,10 @@
         <h1>📧 Expense Followup Assistant</h1>
         <p class="subtitle">Import expense data, filter unassigned transactions, and send email followups</p>
         <div class="header-stats">
-            <div class="stat-card">
-                <div class="stat-label">Total Transactions</div>
-                <div class="stat-value" id="totalTransactions">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Unassigned</div>
-                <div class="stat-value warning" id="unassignedTransactions">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Unique Employees</div>
-                <div class="stat-value" id="uniqueEmployees">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Unassigned Amount</div>
-                <div class="stat-value amount-highlight" id="unassignedAmount">$0</div>
-            </div>
+            <div class="stat-card"><div class="stat-label">Total Transactions</div><div class="stat-value" id="totalTransactions">0</div></div>
+            <div class="stat-card"><div class="stat-label">Unassigned</div><div class="stat-value warning" id="unassignedTransactions">0</div></div>
+            <div class="stat-card"><div class="stat-label">Unique Employees</div><div class="stat-value" id="uniqueEmployees">0</div></div>
+            <div class="stat-card"><div class="stat-label">Total Unassigned Amount</div><div class="stat-value amount-highlight" id="unassignedAmount">$0</div></div>
         </div>
     </header>
 
@@ -224,7 +177,7 @@
     </div>
 
     <!-- Email Templates Modal -->
-    <div id="emailTemplatesSection" class="email-templates-section" style="display: none;">
+    <div id="emailTemplatesSection" class="email-templates-section" style="display:none;">
         <div class="email-templates-container">
             <div class="email-templates-header">
                 <h2>Email Templates</h2>
@@ -234,8 +187,8 @@
                 <button class="template-tab active" onclick="switchTemplate('template1')">Template 1 (Default)</button>
                 <button class="template-tab" onclick="switchTemplate('template2')">Template 2 (Spare)</button>
             </div>
-            <textarea id="emailTemplate1Text" class="email-template-textarea" placeholder="Edit your email template here..."></textarea>
-            <textarea id="emailTemplate2Text" class="email-template-textarea" placeholder="Edit your spare email template here..." style="display: none;"></textarea>
+            <textarea id="emailTemplate1Text" class="email-template-textarea"></textarea>
+            <textarea id="emailTemplate2Text" class="email-template-textarea" style="display:none;"></textarea>
             <div class="email-template-actions">
                 <button class="btn-primary" onclick="copyCurrentTemplate()">📋 Copy Template</button>
                 <button class="btn-secondary" onclick="resetCurrentTemplate()">↺ Reset to Default</button>
@@ -259,72 +212,171 @@
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <tr class="empty-state">
-                    <td colspan="8">
-                        <div class="empty-state-icon">📋</div>
-                        <h3>No data yet</h3>
-                        <p>Upload a CSV file to view transactions</p>
-                    </td>
-                </tr>
+                <tr><td colspan="8" class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h3>No data yet</h3>
+                    <p>Upload a CSV file to view transactions</p>
+                </td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
+    // ── State ────────────────────────────────────────────────────────────────
     let allTransactions = [];
-    let employees = new Set();
+    let selectedEmployees = new Set();
+    let availableEmployees = [];
     let currentTemplate = 'template1';
-    let selectedEmployees = new Set(); // tracks checked employees
-    let availableEmployees = [];       // ordered list for current status filter
 
-    // ── Field aliases ────────────────────────────────────────────────────────
-    const FIELD_ALIASES = {
+    // ── Known Concur leading columns to strip ────────────────────────────────
+    // These get prepended by Concur exports and shift all other columns right.
+    const CONCUR_LEADING_COLS = ['Transaction successfully paired.'];
+
+    // ── Exact field names as they appear in the Concur CSV ───────────────────
+    // Keys are the logical names used in this app; values are the actual CSV headers.
+    // If Concur ever renames a column, add the new name to the array.
+    const FIELD_MAP = {
         'Posted Date':              ['Posted Date'],
         'Employee ID':              ['Employee ID'],
         'Cardholder':               ['Cardholder'],
         'Project Code':             ['Project Code'],
         'Amount':                   ['Amount', 'Amount (always in USD)'],
-        'Split Amount (USD)':       ['Split Amount (USD)', 'Split Amount'],
+        'Split Amount':             ['Split Amount (USD)', 'Split Amount'],
         'Merchant':                 ['Merchant'],
-        'Approved by Finance Date': ['Approved by Finance Date'],
-        'Approved by Manager Date': ['Approved by Manager Date'],
+        'Finance Approved':         ['Approved by Finance Date'],
+        'Manager Approved':         ['Approved by Manager Date'],
         'Submitted Date':           ['Submitted Date'],
         'Transaction Date':         ['Transaction Date'],
         'Report Status':            ['Report Status'],
+        'Expense Category':         ['Expense Category'],
+        'Description':              ['Description Field'],
     };
 
-    const STRIP_LEADING_COLUMNS = [
-        'Transaction successfully paired.',
-        'Transaction Successfully Paired.',
-        'transaction successfully paired.',
-    ];
+    // Resolved: logical → actual header found in this file
+    let fieldMap = {};
 
-    let resolvedFields = {};
+    function resolveHeaders(headers) {
+        // Strip known Concur leading columns
+        const cleaned = CONCUR_LEADING_COLS.includes(headers[0].trim())
+            ? headers.slice(1)
+            : headers;
 
-    function resolveFields(headers) {
-        resolvedFields = {};
-        let cleaned = [...headers];
-        if (cleaned.length > 0 && STRIP_LEADING_COLUMNS.includes(cleaned[0].trim())) {
-            cleaned.shift();
-        }
-        const headerSet = new Set(cleaned.map(h => h.trim()));
-        for (const [logical, candidates] of Object.entries(FIELD_ALIASES)) {
-            for (const candidate of candidates) {
-                if (headerSet.has(candidate)) {
-                    resolvedFields[logical] = candidate;
-                    break;
-                }
+        // Build logical → actual lookup
+        fieldMap = {};
+        const headerSet = new Set(cleaned);
+        for (const [logical, candidates] of Object.entries(FIELD_MAP)) {
+            for (const c of candidates) {
+                if (headerSet.has(c)) { fieldMap[logical] = c; break; }
             }
         }
         return cleaned;
     }
 
-    function getField(tx, logicalName, fallback = '') {
-        const header = resolvedFields[logicalName];
-        if (!header) return fallback;
-        return (tx[header] !== undefined ? tx[header] : fallback).toString().trim();
+    function get(tx, logical, fallback = '') {
+        const col = fieldMap[logical];
+        if (!col) return fallback;
+        const v = tx[col];
+        return (v === undefined || v === null || v === 'nan') ? fallback : String(v).trim();
     }
+
+    // ── CSV parser ───────────────────────────────────────────────────────────
+    // Handles quoted fields properly. Uses PapaParse-style logic.
+    function parseCSV(text) {
+        // Remove BOM
+        text = text.replace(/^\uFEFF/, '');
+        const rows = [];
+        let row = [], field = '', inQuotes = false;
+
+        for (let i = 0; i < text.length; i++) {
+            const ch = text[i];
+            const next = text[i + 1];
+
+            if (inQuotes) {
+                if (ch === '"' && next === '"') { field += '"'; i++; }
+                else if (ch === '"') { inQuotes = false; }
+                else { field += ch; }
+            } else {
+                if (ch === '"') { inQuotes = true; }
+                else if (ch === ',') { row.push(field.trim()); field = ''; }
+                else if (ch === '\n') {
+                    row.push(field.trim());
+                    if (row.some(v => v !== '')) rows.push(row);
+                    row = []; field = '';
+                } else if (ch === '\r') {
+                    // skip \r
+                } else { field += ch; }
+            }
+        }
+        // Last field/row
+        if (field || row.length) { row.push(field.trim()); if (row.some(v => v !== '')) rows.push(row); }
+        return rows;
+    }
+
+    // ── Import ───────────────────────────────────────────────────────────────
+    function importCSV() {
+        const file = document.getElementById('csvFile').files[0];
+        if (!file) { showMessage('Please select a file', 'error'); return; }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const rows = parseCSV(e.target.result);
+                if (rows.length < 2) { showMessage('No data found in file', 'error'); return; }
+
+                // Row 0 = raw headers
+                const rawHeaders = rows[0];
+                const headers = resolveHeaders(rawHeaders);
+
+                // Was a leading column stripped?
+                const offset = rawHeaders.length - headers.length; // 0 or 1
+
+                allTransactions = [];
+                for (let i = 1; i < rows.length; i++) {
+                    const values = rows[i];
+                    const tx = {};
+                    headers.forEach((h, idx) => {
+                        tx[h] = values[idx + offset] || '';
+                    });
+                    const cardholder = get(tx, 'Cardholder');
+                    if (cardholder) allTransactions.push(tx);
+                }
+
+                selectedEmployees.clear();
+                populateEmployeeDropdown();
+                renderTable();
+                updateStats();
+
+                const note = offset > 0 ? ' (Concur leading column removed automatically)' : '';
+                showMessage(`✓ Imported ${allTransactions.length} transactions${note}`, 'success');
+            } catch (err) {
+                showMessage('Error parsing CSV: ' + err.message, 'error');
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    // ── Stats ────────────────────────────────────────────────────────────────
+    function updateStats() {
+        const unassigned = allTransactions.filter(t => getStatus(t) === 'unassigned');
+        const uniqueEmps = new Set(allTransactions.map(t => get(t, 'Cardholder')));
+        const totalAmt = unassigned.reduce((s, t) => s + getAmount(t), 0);
+        document.getElementById('totalTransactions').textContent = allTransactions.length;
+        document.getElementById('unassignedTransactions').textContent = unassigned.length;
+        document.getElementById('uniqueEmployees').textContent = uniqueEmps.size;
+        document.getElementById('unassignedAmount').textContent = '$' + totalAmt.toFixed(2);
+    }
+
+    function getStatus(tx) {
+        const s = get(tx, 'Report Status').toLowerCase();
+        if (s === 'paid') return 'paid';
+        if (s === 'submitted') return 'submitted';
+        return 'unassigned';
+    }
+
+    function getAmount(tx) { return parseFloat(get(tx, 'Amount', '0')) || 0; }
+    function getSplitAmount(tx) { return parseFloat(get(tx, 'Split Amount', '0')) || 0; }
 
     // ── Employee multiselect ─────────────────────────────────────────────────
     function toggleEmpDropdown() {
@@ -337,7 +389,7 @@
             trigger.classList.add('open');
             dropdown.classList.add('open');
             document.getElementById('empSearch').value = '';
-            filterEmpList();
+            renderEmpList(availableEmployees);
             setTimeout(() => document.getElementById('empSearch').focus(), 50);
         }
     }
@@ -348,122 +400,186 @@
     }
 
     function populateEmployeeDropdown() {
-        const statusFilter = document.getElementById('statusFilter').value || '';
-        const matchingCardholders = new Set();
+        const statusFilter = document.getElementById('statusFilter').value;
+        const set = new Set();
         allTransactions.forEach(tx => {
-            const txStatus = getReportStatus(tx);
-            if (statusFilter === '' || txStatus === statusFilter) {
-                matchingCardholders.add(getField(tx, 'Cardholder'));
+            if (!statusFilter || getStatus(tx) === statusFilter) {
+                set.add(get(tx, 'Cardholder'));
             }
         });
-        availableEmployees = Array.from(matchingCardholders).sort();
-
-        // Remove any selected employees no longer in the filtered set
-        selectedEmployees.forEach(emp => {
-            if (!matchingCardholders.has(emp)) selectedEmployees.delete(emp);
-        });
-
+        availableEmployees = Array.from(set).filter(Boolean).sort();
+        selectedEmployees.forEach(e => { if (!set.has(e)) selectedEmployees.delete(e); });
         renderEmpList(availableEmployees);
-        updateEmpTriggerLabel();
+        updateEmpLabel();
     }
 
     function renderEmpList(emps) {
         const list = document.getElementById('empList');
-        if (emps.length === 0) {
+        if (!emps.length) {
             list.innerHTML = '<div class="multiselect-empty">No employees found</div>';
             return;
         }
-        list.innerHTML = emps.map(emp => `
-            <div class="multiselect-item" onclick="toggleEmployee('${emp.replace(/'/g, "\\'")}', event)">
-                <input type="checkbox" id="chk_${CSS.escape(emp)}" ${selectedEmployees.has(emp) ? 'checked' : ''}
-                    onchange="toggleEmployee('${emp.replace(/'/g, "\\'")}', event)" onclick="event.stopPropagation()">
-                <label for="chk_${CSS.escape(emp)}">${escapeHtml(emp)}</label>
-            </div>
-        `).join('');
+        list.innerHTML = emps.map(emp => {
+            const id = 'chk_' + emp.replace(/[^a-z0-9]/gi, '_');
+            const checked = selectedEmployees.has(emp) ? 'checked' : '';
+            return `<div class="multiselect-item" onclick="toggleEmployee(${JSON.stringify(emp)}, event)">
+                <input type="checkbox" id="${id}" ${checked} onclick="event.stopPropagation()" onchange="toggleEmployee(${JSON.stringify(emp)}, event)">
+                <label for="${id}">${escapeHtml(emp)}</label>
+            </div>`;
+        }).join('');
     }
 
     function filterEmpList() {
         const q = document.getElementById('empSearch').value.toLowerCase();
-        const filtered = availableEmployees.filter(e => e.toLowerCase().includes(q));
-        renderEmpList(filtered);
+        renderEmpList(availableEmployees.filter(e => e.toLowerCase().includes(q)));
     }
 
     function toggleEmployee(emp, event) {
         event.stopPropagation();
-        if (selectedEmployees.has(emp)) {
-            selectedEmployees.delete(emp);
-        } else {
-            selectedEmployees.add(emp);
-        }
-        // Sync checkbox state
-        const chk = document.getElementById('chk_' + CSS.escape(emp));
+        if (selectedEmployees.has(emp)) selectedEmployees.delete(emp);
+        else selectedEmployees.add(emp);
+        const id = 'chk_' + emp.replace(/[^a-z0-9]/gi, '_');
+        const chk = document.getElementById(id);
         if (chk) chk.checked = selectedEmployees.has(emp);
-        updateEmpTriggerLabel();
+        updateEmpLabel();
         filterTable();
     }
 
     function selectAllEmployees() {
         const q = document.getElementById('empSearch').value.toLowerCase();
-        const visible = availableEmployees.filter(e => e.toLowerCase().includes(q));
-        visible.forEach(e => selectedEmployees.add(e));
+        availableEmployees.filter(e => e.toLowerCase().includes(q)).forEach(e => selectedEmployees.add(e));
         filterEmpList();
-        updateEmpTriggerLabel();
+        updateEmpLabel();
         filterTable();
     }
 
     function clearAllEmployees() {
         selectedEmployees.clear();
         filterEmpList();
-        updateEmpTriggerLabel();
+        updateEmpLabel();
         filterTable();
     }
 
-    function updateEmpTriggerLabel() {
-        const triggerText = document.getElementById('empTriggerText');
-        const count = selectedEmployees.size;
-        if (count === 0) {
-            triggerText.innerHTML = 'All Employees';
-            triggerText.className = 'multiselect-trigger-text placeholder';
-        } else if (count === 1) {
-            const name = Array.from(selectedEmployees)[0];
-            triggerText.innerHTML = escapeHtml(name);
-            triggerText.className = 'multiselect-trigger-text';
+    function updateEmpLabel() {
+        const el = document.getElementById('empTriggerText');
+        const n = selectedEmployees.size;
+        if (n === 0) {
+            el.innerHTML = 'All Employees';
+            el.className = 'multiselect-trigger-text placeholder';
+        } else if (n === 1) {
+            el.innerHTML = escapeHtml(Array.from(selectedEmployees)[0]);
+            el.className = 'multiselect-trigger-text';
         } else {
-            triggerText.innerHTML = `${count} employees selected <span class="multiselect-badge">${count}</span>`;
-            triggerText.className = 'multiselect-trigger-text';
+            el.innerHTML = `${n} employees selected <span class="multiselect-badge">${n}</span>`;
+            el.className = 'multiselect-trigger-text';
         }
     }
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', e => {
         if (!e.target.closest('#empMultiWrapper')) closeEmpDropdown();
-        if (!e.target.closest('.email-templates-section') && !e.target.closest('[onclick="toggleEmailTemplates()"]')) {
-            // don't close email modal here
-        }
     });
 
+    // ── Filter & render ──────────────────────────────────────────────────────
+    function getFilteredTransactions() {
+        const statusFilter = document.getElementById('statusFilter').value;
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        return allTransactions.filter(t => {
+            const cardholder = get(t, 'Cardholder');
+            const empId = get(t, 'Employee ID');
+            const project = get(t, 'Project Code');
+            const matchEmp = selectedEmployees.size === 0 || selectedEmployees.has(cardholder);
+            const matchStatus = !statusFilter || getStatus(t) === statusFilter;
+            const matchSearch = !search ||
+                cardholder.toLowerCase().includes(search) ||
+                empId.toLowerCase().includes(search) ||
+                project.toLowerCase().includes(search);
+            return matchEmp && matchStatus && matchSearch;
+        });
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('tableBody');
+        const filtered = getFilteredTransactions();
+
+        if (!allTransactions.length) {
+            tbody.innerHTML = `<tr><td colspan="8" class="empty-state"><div class="empty-state-icon">📋</div><h3>No data yet</h3><p>Upload a CSV file to view transactions</p></td></tr>`;
+            return;
+        }
+        if (!filtered.length) {
+            tbody.innerHTML = `<tr><td colspan="8" class="empty-state"><div class="empty-state-icon">🔍</div><h3>No results</h3><p>Try adjusting your filters</p></td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(tx => {
+            const amount = getAmount(tx);
+            const split = getSplitAmount(tx);
+            const status = getStatus(tx);
+            const badge = status === 'paid'
+                ? '<span class="badge badge-paid">✓ PAID</span>'
+                : status === 'submitted'
+                    ? '<span class="badge badge-submitted">⏳ SUBMITTED</span>'
+                    : '<span class="badge badge-unassigned">⚠️ UNASSIGNED</span>';
+
+            return `<tr>
+                <td>${badge}</td>
+                <td>${escapeHtml(get(tx, 'Posted Date'))}</td>
+                <td><span class="cardholder-name">${escapeHtml(get(tx, 'Cardholder'))}</span></td>
+                <td>${escapeHtml(get(tx, 'Project Code'))}</td>
+                <td><span class="amount-highlight">$${amount.toFixed(2)}</span></td>
+                <td>${split > 0 ? '$' + split.toFixed(2) : '—'}</td>
+                <td>${escapeHtml(get(tx, 'Merchant'))}</td>
+                <td>${escapeHtml(get(tx, 'Finance Approved', '—'))}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function filterTable() { renderTable(); updateStats(); }
+
+    function escapeHtml(text) {
+        return String(text).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    }
+
+    function clearData() {
+        if (!confirm('Clear all data? This cannot be undone.')) return;
+        allTransactions = [];
+        selectedEmployees.clear();
+        availableEmployees = [];
+        fieldMap = {};
+        document.getElementById('empList').innerHTML = '';
+        document.getElementById('searchInput').value = '';
+        updateEmpLabel();
+        renderTable();
+        updateStats();
+        showMessage('Data cleared', 'success');
+    }
+
+    function showMessage(msg, type = 'success') {
+        const el = document.getElementById('message');
+        el.innerHTML = `<div class="message ${type}">${msg}</div>`;
+        setTimeout(() => el.innerHTML = '', 4000);
+    }
+
     // ── Email templates ──────────────────────────────────────────────────────
-    const DEFAULT_EMAIL_TEMPLATE_1 = `REMINDER: Submit Credit Card Transactions on Travel Bank
+    const DEFAULT_TEMPLATES = {
+        template1: `REMINDER: Submit Credit Card Transactions on Travel Bank
 
 Good day,
 
 Just a quick reminder to please ensure that you log into Travel Bank and SUBMIT your credit card transactions as soon as they clear. I've attached an image showing the transactions that are still outstanding.
 
-Let me know if you need any help with this or run into any issues.`;
-
-    const DEFAULT_EMAIL_TEMPLATE_2 = `MarineTeknik – Pending Travel Bank Submissions Requiring Manager's Approval
+Let me know if you need any help with this or run into any issues.`,
+        template2: `MarineTeknik – Pending Travel Bank Submissions Requiring Manager's Approval
 
 Good day,
 
 Please be advised that your delegate has pending submissions awaiting your approval. Kindly log into your Travel Bank account to review and approve them at your earliest convenience.
 
-Thank you for your attention to this matter.`;
+Thank you for your attention to this matter.`
+    };
 
     function initEmailTemplates() {
-        const saved1 = localStorage.getItem('emailTemplate1');
-        const saved2 = localStorage.getItem('emailTemplate2');
-        document.getElementById('emailTemplate1Text').value = saved1 || DEFAULT_EMAIL_TEMPLATE_1;
-        document.getElementById('emailTemplate2Text').value = saved2 || DEFAULT_EMAIL_TEMPLATE_2;
+        document.getElementById('emailTemplate1Text').value = localStorage.getItem('emailTemplate1') || DEFAULT_TEMPLATES.template1;
+        document.getElementById('emailTemplate2Text').value = localStorage.getItem('emailTemplate2') || DEFAULT_TEMPLATES.template2;
     }
 
     function toggleEmailTemplates() {
@@ -477,343 +593,96 @@ Thank you for your attention to this matter.`;
         }
     }
 
-    function switchTemplate(template) {
-        currentTemplate = template;
-        const tabs = document.querySelectorAll('.template-tab');
-        const textarea1 = document.getElementById('emailTemplate1Text');
-        const textarea2 = document.getElementById('emailTemplate2Text');
-        tabs.forEach(tab => tab.classList.remove('active'));
-        if (template === 'template1') {
-            tabs[0].classList.add('active');
-            textarea1.style.display = 'block';
-            textarea2.style.display = 'none';
-        } else {
-            tabs[1].classList.add('active');
-            textarea1.style.display = 'none';
-            textarea2.style.display = 'block';
-        }
-    }
-
-    function getCurrentTemplate() {
-        return currentTemplate === 'template1'
-            ? document.getElementById('emailTemplate1Text').value
-            : document.getElementById('emailTemplate2Text').value;
+    function switchTemplate(t) {
+        currentTemplate = t;
+        document.querySelectorAll('.template-tab').forEach((el, i) => el.classList.toggle('active', i === (t === 'template1' ? 0 : 1)));
+        document.getElementById('emailTemplate1Text').style.display = t === 'template1' ? 'block' : 'none';
+        document.getElementById('emailTemplate2Text').style.display = t === 'template2' ? 'block' : 'none';
     }
 
     function copyCurrentTemplate() {
-        const text = getCurrentTemplate();
+        const text = currentTemplate === 'template1'
+            ? document.getElementById('emailTemplate1Text').value
+            : document.getElementById('emailTemplate2Text').value;
         navigator.clipboard.writeText(text).then(() => {
-            showMessage('✓ Template copied to clipboard', 'success');
             localStorage.setItem('emailTemplate1', document.getElementById('emailTemplate1Text').value);
             localStorage.setItem('emailTemplate2', document.getElementById('emailTemplate2Text').value);
-            setTimeout(() => toggleEmailTemplates(), 500);
-        }).catch(() => showMessage('Failed to copy to clipboard', 'error'));
+            showMessage('✓ Template copied to clipboard', 'success');
+            setTimeout(toggleEmailTemplates, 500);
+        }).catch(() => showMessage('Failed to copy', 'error'));
     }
 
     function resetCurrentTemplate() {
-        if (currentTemplate === 'template1') {
-            if (confirm('Reset Template 1 to default?')) {
-                document.getElementById('emailTemplate1Text').value = DEFAULT_EMAIL_TEMPLATE_1;
-                localStorage.setItem('emailTemplate1', DEFAULT_EMAIL_TEMPLATE_1);
-                showMessage('✓ Template 1 reset to default', 'success');
-            }
-        } else {
-            if (confirm('Reset Template 2?')) {
-                document.getElementById('emailTemplate2Text').value = DEFAULT_EMAIL_TEMPLATE_2;
-                localStorage.setItem('emailTemplate2', DEFAULT_EMAIL_TEMPLATE_2);
-                showMessage('✓ Template 2 reset', 'success');
-            }
-        }
-    }
-
-    // ── CSV import ───────────────────────────────────────────────────────────
-    function importCSV() {
-        const file = document.getElementById('csvFile').files[0];
-        if (!file) { showMessage('Please select a file', 'error'); return; }
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const csv = e.target.result;
-                const lines = csv.split('\n');
-
-                const rawHeaders = lines[0]
-                    .replace(/^\uFEFF/, '')
-                    .split(',')
-                    .map(h => h.trim().replace(/^"|"$/g, ''));
-
-                const cleanedHeaders = resolveFields(rawHeaders);
-                const strippedLeading = cleanedHeaders.length < rawHeaders.length;
-                const dataStartCol = strippedLeading ? 1 : 0;
-
-                allTransactions = [];
-                employees.clear();
-
-                for (let i = 1; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
-                    const values = parseCSVLine(lines[i]);
-                    const tx = {};
-                    cleanedHeaders.forEach((header, idx) => {
-                        tx[header] = (values[idx + dataStartCol] || '').trim().replace(/^"|"$/g, '');
-                    });
-                    const cardholder = getField(tx, 'Cardholder');
-                    if (cardholder) {
-                        allTransactions.push(tx);
-                    }
-                }
-
-                selectedEmployees.clear();
-                populateEmployeeDropdown();
-                renderTable();
-                updateStats();
-
-                const strippedMsg = strippedLeading ? ' (leading status column auto-removed)' : '';
-                showMessage(`✓ Successfully imported ${allTransactions.length} transactions${strippedMsg}`, 'success');
-            } catch (error) {
-                showMessage(`Error parsing CSV: ${error.message}`, 'error');
-            }
-        };
-        reader.readAsText(file);
-    }
-
-    function parseCSVLine(line) {
-        const result = [];
-        let current = '';
-        let insideQuotes = false;
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                insideQuotes = !insideQuotes;
-            } else if (char === ',' && !insideQuotes) {
-                result.push(current);
-                current = '';
-            } else {
-                current += char;
-            }
-        }
-        result.push(current);
-        return result;
-    }
-
-    // ── Stats & filtering ────────────────────────────────────────────────────
-    function updateStats() {
-        const unassignedOnly = allTransactions.filter(t => getReportStatus(t) === 'unassigned');
-        const uniqueEmps = new Set(allTransactions.map(t => getField(t, 'Cardholder')));
-        const totalAmount = unassignedOnly.reduce((sum, t) => sum + getAmount(t), 0);
-
-        document.getElementById('totalTransactions').textContent = allTransactions.length;
-        document.getElementById('unassignedTransactions').textContent = unassignedOnly.length;
-        document.getElementById('uniqueEmployees').textContent = uniqueEmps.size;
-        document.getElementById('unassignedAmount').textContent = `$${totalAmount.toFixed(2)}`;
-    }
-
-    function getReportStatus(tx) {
-        const s = getField(tx, 'Report Status').toLowerCase();
-        if (s === 'paid') return 'paid';
-        if (s === 'submitted') return 'submitted';
-        return 'unassigned';
-    }
-
-    function getAmount(tx) {
-        return parseFloat(getField(tx, 'Amount', '0')) || 0;
-    }
-
-    function getSplitAmount(tx) {
-        return parseFloat(getField(tx, 'Split Amount (USD)', '0')) || 0;
-    }
-
-    function getFilteredTransactions() {
-        const statusFilter = document.getElementById('statusFilter').value;
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
-        return allTransactions.filter(t => {
-            const cardholder = getField(t, 'Cardholder');
-            const empId = getField(t, 'Employee ID');
-            const projectCode = getField(t, 'Project Code');
-            const matchesEmp = selectedEmployees.size === 0 || selectedEmployees.has(cardholder);
-            const matchesSearch = searchTerm === '' ||
-                cardholder.toLowerCase().includes(searchTerm) ||
-                empId.toLowerCase().includes(searchTerm) ||
-                projectCode.toLowerCase().includes(searchTerm);
-            const matchesStatus = statusFilter === '' || getReportStatus(t) === statusFilter;
-            return matchesEmp && matchesSearch && matchesStatus;
-        });
-    }
-
-    // ── Render ───────────────────────────────────────────────────────────────
-    function renderTable() {
-        const tbody = document.getElementById('tableBody');
-        const filtered = getFilteredTransactions();
-
-        if (allTransactions.length === 0) {
-            tbody.innerHTML = `<tr class="empty-state"><td colspan="8">
-                <div class="empty-state-icon">📋</div>
-                <h3>No data yet</h3><p>Upload a CSV file to view transactions</p>
-            </td></tr>`;
-            return;
-        }
-
-        if (filtered.length === 0) {
-            tbody.innerHTML = `<tr class="empty-state"><td colspan="8">
-                <div class="empty-state-icon">🔍</div>
-                <h3>No results</h3><p>Try adjusting your filters</p>
-            </td></tr>`;
-            return;
-        }
-
-        let html = '';
-        filtered.forEach(tx => {
-            const amount = getAmount(tx);
-            const splitAmount = getSplitAmount(tx);
-            const status = getReportStatus(tx);
-            let statusBadge = '';
-            if (status === 'paid')          statusBadge = '<span class="badge badge-paid">✓ PAID</span>';
-            else if (status === 'submitted') statusBadge = '<span class="badge badge-submitted">⏳ SUBMITTED</span>';
-            else                             statusBadge = '<span class="badge badge-unassigned">⚠️ UNASSIGNED</span>';
-
-            html += `<tr>
-                <td>${statusBadge}</td>
-                <td>${escapeHtml(getField(tx, 'Posted Date'))}</td>
-                <td><div class="cardholder-info">
-                    <div class="cardholder-name">${escapeHtml(getField(tx, 'Cardholder'))}</div>
-                </div></td>
-                <td>${escapeHtml(getField(tx, 'Project Code'))}</td>
-                <td><span class="amount-highlight">$${amount.toFixed(2)}</span></td>
-                <td>${splitAmount > 0 ? `$${splitAmount.toFixed(2)}` : '-'}</td>
-                <td>${escapeHtml(getField(tx, 'Merchant'))}</td>
-                <td>${escapeHtml(getField(tx, 'Approved by Finance Date', '-'))}</td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
-    }
-
-    function escapeHtml(text) {
-        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-        return String(text).replace(/[&<>"']/g, m => map[m]);
-    }
-
-    function filterTable() { renderTable(); updateStats(); }
-
-    function clearData() {
-        if (confirm('Clear all data? This cannot be undone.')) {
-            allTransactions = [];
-            employees.clear();
-            resolvedFields = {};
-            selectedEmployees.clear();
-            availableEmployees = [];
-            document.getElementById('empList').innerHTML = '';
-            updateEmpTriggerLabel();
-            document.getElementById('searchInput').value = '';
-            renderTable();
-            updateStats();
-            showMessage('Data cleared', 'success');
-        }
-    }
-
-    function showMessage(msg, type = 'success') {
-        const el = document.getElementById('message');
-        el.innerHTML = `<div class="message ${type}">${msg}</div>`;
-        setTimeout(() => { el.innerHTML = ''; }, 4000);
+        const key = currentTemplate;
+        if (!confirm(`Reset ${key === 'template1' ? 'Template 1' : 'Template 2'} to default?`)) return;
+        document.getElementById(`email${key.charAt(0).toUpperCase() + key.slice(1)}Text`).value = DEFAULT_TEMPLATES[key];
+        localStorage.setItem(key, DEFAULT_TEMPLATES[key]);
+        showMessage('✓ Reset to default', 'success');
     }
 
     // ── Export ───────────────────────────────────────────────────────────────
     function exportTableAsImage() {
         const filtered = getFilteredTransactions();
-        if (filtered.length === 0) { showMessage('No transactions to export', 'error'); return; }
-
-        const tableElement = document.querySelector('table');
-        const cloneTable = tableElement.cloneNode(true);
-        const tempContainer = document.createElement('div');
-        tempContainer.style.cssText = 'position:absolute;left:-9999px;background:white;padding:20px;';
-        tempContainer.appendChild(cloneTable);
-        document.body.appendChild(tempContainer);
-
-        html2canvas(tempContainer, { backgroundColor: '#ffffff', scale: 2, logging: false }).then(canvas => {
+        if (!filtered.length) { showMessage('No transactions to export', 'error'); return; }
+        const clone = document.querySelector('table').cloneNode(true);
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'position:absolute;left:-9999px;background:white;padding:20px;';
+        wrap.appendChild(clone);
+        document.body.appendChild(wrap);
+        html2canvas(wrap, { backgroundColor: '#fff', scale: 2, logging: false }).then(canvas => {
             canvas.toBlob(blob => {
-                const item = new ClipboardItem({ 'image/png': blob });
-                navigator.clipboard.write([item]).then(() => {
-                    showMessage('✓ Table copied to clipboard as image', 'success');
-                    document.body.removeChild(tempContainer);
-                }).catch(() => {
-                    showMessage('Failed to copy to clipboard', 'error');
-                    document.body.removeChild(tempContainer);
-                });
+                navigator.clipboard.write([new ClipboardItem({'image/png': blob})]).then(() => {
+                    showMessage('✓ Table copied as image', 'success');
+                }).catch(() => showMessage('Failed to copy', 'error')).finally(() => document.body.removeChild(wrap));
             });
-        }).catch(() => {
-            showMessage('Error capturing table', 'error');
-            document.body.removeChild(tempContainer);
-        });
+        }).catch(() => { showMessage('Error capturing table', 'error'); document.body.removeChild(wrap); });
     }
 
     function exportPDF() {
         const filtered = getFilteredTransactions();
-        if (filtered.length === 0) { showMessage('No transactions to export', 'error'); return; }
-
+        if (!filtered.length) { showMessage('No transactions to export', 'error'); return; }
         const today = new Date().toISOString().split('T')[0];
-        const empLabel = selectedEmployees.size === 1
-            ? Array.from(selectedEmployees)[0].replace(/\s+/g, '-')
+        const empLabel = selectedEmployees.size === 1 ? Array.from(selectedEmployees)[0].replace(/\s+/g, '-')
             : selectedEmployees.size > 1 ? `${selectedEmployees.size}-employees` : 'all';
         const fileName = `expense-followup-${empLabel}-${today}.pdf`;
 
-        let htmlContent = `
-            <div style="font-family:Arial,sans-serif;padding:20px;color:#333;">
-                <h1 style="color:#0f172a;margin-bottom:10px;">Expense Submission Followup</h1>
-                <p style="color:#64748b;margin-bottom:20px;font-size:14px;">Generated on ${new Date().toLocaleDateString()}</p>
-                <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:20px;">
-                    <table style="width:100%;border-collapse:collapse;">
-                        <tr>
-                            <td style="padding:8px;"><strong>Total Transactions:</strong> ${filtered.length}</td>
-                            <td style="padding:8px;"><strong>Total Amount:</strong> $${filtered.reduce((s, t) => s + getAmount(t), 0).toFixed(2)}</td>
-                        </tr>
-                    </table>
-                </div>
-                <table style="width:100%;border-collapse:collapse;margin-top:20px;">
-                    <thead>
-                        <tr style="background:#e2e8f0;border-bottom:2px solid #cbd5e1;">
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Report Status</th>
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Posted Date</th>
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Cardholder</th>
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Project Code</th>
-                            <th style="padding:12px;text-align:right;font-size:12px;text-transform:uppercase;">Amount (USD)</th>
-                            <th style="padding:12px;text-align:right;font-size:12px;text-transform:uppercase;">Split Amount (USD)</th>
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Merchant</th>
-                            <th style="padding:12px;text-align:left;font-size:12px;text-transform:uppercase;">Approved by Finance</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-
-        filtered.forEach((tx, idx) => {
-            const amount = getAmount(tx);
-            const splitAmount = getSplitAmount(tx);
-            const status = getReportStatus(tx);
-            const statusText = status === 'paid' ? 'PAID' : status === 'submitted' ? 'SUBMITTED' : 'UNASSIGNED';
-            const statusColor = status === 'paid' ? '#166534' : status === 'submitted' ? '#92400e' : '#991b1b';
-            const bg = idx % 2 === 0 ? '#ffffff' : '#f9fafb';
-
-            htmlContent += `<tr style="background:${bg};border-bottom:1px solid #e2e8f0;">
-                <td style="padding:12px;font-size:13px;color:${statusColor};font-weight:600;">${statusText}</td>
-                <td style="padding:12px;font-size:13px;">${escapeHtml(getField(tx, 'Posted Date'))}</td>
-                <td style="padding:12px;font-size:13px;">${escapeHtml(getField(tx, 'Cardholder'))}</td>
-                <td style="padding:12px;font-size:13px;">${escapeHtml(getField(tx, 'Project Code'))}</td>
-                <td style="padding:12px;text-align:right;font-size:13px;font-weight:600;">$${amount.toFixed(2)}</td>
-                <td style="padding:12px;text-align:right;font-size:13px;">${splitAmount > 0 ? `$${splitAmount.toFixed(2)}` : '-'}</td>
-                <td style="padding:12px;font-size:13px;">${escapeHtml(getField(tx, 'Merchant'))}</td>
-                <td style="padding:12px;font-size:13px;">${escapeHtml(getField(tx, 'Approved by Finance Date', '-'))}</td>
+        const rows = filtered.map((tx, i) => {
+            const amt = getAmount(tx); const split = getSplitAmount(tx);
+            const s = getStatus(tx);
+            const sc = s === 'paid' ? '#166534' : s === 'submitted' ? '#92400e' : '#991b1b';
+            const st = s === 'paid' ? 'PAID' : s === 'submitted' ? 'SUBMITTED' : 'UNASSIGNED';
+            const bg = i % 2 === 0 ? '#fff' : '#f9fafb';
+            return `<tr style="background:${bg};border-bottom:1px solid #e2e8f0;">
+                <td style="padding:10px;color:${sc};font-weight:600;font-size:12px;">${st}</td>
+                <td style="padding:10px;font-size:12px;">${escapeHtml(get(tx,'Posted Date'))}</td>
+                <td style="padding:10px;font-size:12px;">${escapeHtml(get(tx,'Cardholder'))}</td>
+                <td style="padding:10px;font-size:12px;">${escapeHtml(get(tx,'Project Code'))}</td>
+                <td style="padding:10px;text-align:right;font-size:12px;font-weight:600;">$${amt.toFixed(2)}</td>
+                <td style="padding:10px;text-align:right;font-size:12px;">${split > 0 ? '$'+split.toFixed(2) : '—'}</td>
+                <td style="padding:10px;font-size:12px;">${escapeHtml(get(tx,'Merchant'))}</td>
+                <td style="padding:10px;font-size:12px;">${escapeHtml(get(tx,'Finance Approved','—'))}</td>
             </tr>`;
-        });
+        }).join('');
 
-        htmlContent += `</tbody></table>
-            <div style="margin-top:30px;padding-top:20px;border-top:1px solid #e2e8f0;color:#64748b;font-size:12px;">
-                <p>This report contains expense submissions that require followup.</p>
-            </div></div>`;
+        const html = `<div style="font-family:Arial,sans-serif;padding:20px;color:#333;">
+            <h1 style="color:#0f172a;margin-bottom:6px;">Expense Submission Followup</h1>
+            <p style="color:#64748b;font-size:13px;margin-bottom:20px;">Generated ${new Date().toLocaleDateString()} · ${filtered.length} transactions · Total: $${filtered.reduce((s,t)=>s+getAmount(t),0).toFixed(2)}</p>
+            <table style="width:100%;border-collapse:collapse;">
+                <thead><tr style="background:#e2e8f0;">
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Status</th>
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Posted Date</th>
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Cardholder</th>
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Project</th>
+                    <th style="padding:10px;text-align:right;font-size:11px;text-transform:uppercase;">Amount</th>
+                    <th style="padding:10px;text-align:right;font-size:11px;text-transform:uppercase;">Split</th>
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Merchant</th>
+                    <th style="padding:10px;text-align:left;font-size:11px;text-transform:uppercase;">Finance Approved</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
 
-        const opt = {
-            margin: 10, filename: fileName,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
-            jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' }
-        };
-        html2pdf().set(opt).from(htmlContent).save();
+        html2pdf().set({ margin:10, filename:fileName, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2}, jsPDF:{orientation:'landscape',unit:'mm',format:'a4'} }).from(html).save();
         showMessage(`✓ PDF exported as ${fileName}`, 'success');
     }
 </script>
