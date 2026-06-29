@@ -412,10 +412,13 @@ function getFiltered() {
     const sf = document.getElementById('statusFilter').value;
     const q  = document.getElementById('search').value.toLowerCase();
     return rows.filter(r => {
-        const c = g(r,'Cardholder'), id = g(r,'Employee ID'), p = g(r,'Project Code');
-        return (!selected.size || selected.has(c))
-            && (!sf || status(r) === sf)
-            && (!q || c.toLowerCase().includes(q) || id.toLowerCase().includes(q) || p.toLowerCase().includes(q));
+        const cardholder = g(r, 'Cardholder');
+        const empMatch   = selected.size === 0 || selected.has(cardholder);
+        const statMatch  = !sf || status(r) === sf;
+        const srchMatch  = !q  || cardholder.toLowerCase().includes(q)
+                                || g(r,'Employee ID').toLowerCase().includes(q)
+                                || g(r,'Project Code').toLowerCase().includes(q);
+        return empMatch && statMatch && srchMatch;
     });
 }
 
@@ -425,7 +428,9 @@ function render() {
         tbody.innerHTML = '<tr><td colspan="8" class="empty"><div class="empty-icon">📋</div><div>No data — import a CSV to begin</div></td></tr>';
         return;
     }
+    console.log('render: selected=', [...selected], 'fmap.Cardholder=', fmap['Cardholder']);
     const filtered = getFiltered();
+    console.log('render: filtered', filtered.length, 'of', rows.length);
     if (!filtered.length) {
         tbody.innerHTML = '<tr><td colspan="8" class="empty"><div class="empty-icon">🔍</div><div>No results — try adjusting filters</div></td></tr>';
         return;
