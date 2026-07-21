@@ -85,6 +85,7 @@
         .b-paid { background: #dcfce7; color: #166534; }
         .b-sub  { background: #fed7aa; color: #92400e; }
         .b-una  { background: #fecaca; color: #991b1b; }
+        .b-ret  { background: #e0e7ff; color: #3730a3; }
         .amt    { font-weight: 600; color: var(--accent); }
         .emp-name { font-weight: 600; }
         .empty  { padding: 50px; text-align: center; color: var(--muted); }
@@ -139,6 +140,7 @@
                     <option value="unassigned">Unassigned</option>
                     <option value="submitted">Submitted</option>
                     <option value="paid">Paid</option>
+                    <option value="returned">Returned</option>
                 </select>
             </div>
             <div class="field">
@@ -309,7 +311,10 @@ function updateStats() {
 
 function status(r) {
     const s = g(r,'Report Status').toLowerCase();
-    return s === 'paid' ? 'paid' : s === 'submitted' ? 'submitted' : 'unassigned';
+    if (s === 'paid') return 'paid';
+    if (s === 'submitted') return 'submitted';
+    if (s === 'returned') return 'returned';
+    return 'unassigned';
 }
 function amt(r)   { return parseFloat(g(r,'Amount','0')) || 0; }
 function split(r) { return parseFloat(g(r,'Split','0')) || 0; }
@@ -439,6 +444,7 @@ function render() {
         const s = status(r);
         const badge = s === 'paid'      ? '<span class="badge b-paid">✓ Paid</span>'
                     : s === 'submitted' ? '<span class="badge b-sub">⏳ Submitted</span>'
+                    : s === 'returned'  ? '<span class="badge b-ret">↩ Returned</span>'
                                         : '<span class="badge b-una">⚠️ Unassigned</span>';
         const a = amt(r), sp = split(r);
         return `<tr>
