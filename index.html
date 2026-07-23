@@ -97,7 +97,7 @@
         /* ── Email modal ── */
         .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 10000; align-items: center; justify-content: center; }
         .modal-bg.show { display: flex; }
-        .modal { background: white; border-radius: 10px; width: 90%; max-width: 680px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.3); overflow: hidden; }
+        .modal { background: white; border-radius: 10px; width: 90%; max-width: 760px; max-height: 85vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.3); overflow: hidden; }
         .modal-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); }
         .modal-head h2 { font-size: 18px; margin: 0; }
         .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted); padding: 0; line-height: 1; }
@@ -197,10 +197,12 @@
         <div class="modal-tabs">
             <button class="modal-tab active" onclick="switchTab(0)">Template 1</button>
             <button class="modal-tab" onclick="switchTab(1)">Template 2</button>
+            <button class="modal-tab" onclick="switchTab(2)">Delegate Assignment</button>
         </div>
         <div class="modal-body">
             <textarea class="modal-textarea" id="tpl0"></textarea>
             <textarea class="modal-textarea" id="tpl1" style="display:none"></textarea>
+            <textarea class="modal-textarea" id="tpl2" style="display:none"></textarea>
         </div>
         <div class="modal-foot">
             <button class="btn-blue" onclick="copyTpl()">📋 Copy</button>
@@ -497,11 +499,23 @@ Good day,
 
 Please be advised that your delegate has pending submissions awaiting your approval. Kindly log into your Travel Bank account to review and approve them at your earliest convenience.
 
-Thank you for your attention to this matter.`];
+Thank you for your attention to this matter.`,
+`MarineTeknik – Travel Bank Delegate Assignment
+
+Good day Team,
+
+This email is to confirm that [DELEGATE NAME] has been assigned as a delegate for [MANAGER NAME] through [END DATE].
+
+During this period, [MANAGER NAME] will continue to receive expense submissions for approval. In addition, [DELEGATE NAME] will be able to log in to [MANAGER NAME]'s account to review and approve those submissions on his/her behalf.
+
+[DELEGATE NAME] will also receive reminder emails for any outstanding expense reports from cardholders who report to managers below [MANAGER NAME].
+
+Please let me know if you have any questions.`];
 
 function showEmailModal() {
     document.getElementById('tpl0').value = localStorage.getItem('tpl0') || DEFAULTS[0];
     document.getElementById('tpl1').value = localStorage.getItem('tpl1') || DEFAULTS[1];
+    document.getElementById('tpl2').value = localStorage.getItem('tpl2') || DEFAULTS[2];
     switchTab(0);
     document.getElementById('emailModal').classList.add('show');
 }
@@ -511,12 +525,14 @@ function switchTab(i) {
     document.querySelectorAll('.modal-tab').forEach((t,idx) => t.classList.toggle('active', idx===i));
     document.getElementById('tpl0').style.display = i===0 ? 'block' : 'none';
     document.getElementById('tpl1').style.display = i===1 ? 'block' : 'none';
+    document.getElementById('tpl2').style.display = i===2 ? 'block' : 'none';
 }
 function copyTpl() {
     const text = document.getElementById('tpl'+curTab).value;
     navigator.clipboard.writeText(text).then(() => {
         localStorage.setItem('tpl0', document.getElementById('tpl0').value);
         localStorage.setItem('tpl1', document.getElementById('tpl1').value);
+        localStorage.setItem('tpl2', document.getElementById('tpl2').value);
         msg('✓ Template copied');
         setTimeout(hideEmailModal, 400);
     }).catch(() => msg('Copy failed', true));
